@@ -16,7 +16,7 @@ public class ParkingSystemApplication {
 	
 	  @RequestMapping("/")
 	  public String greeting(){
-	    return "Hello world!";
+	    return "Hello Dream Team!";
 	  }
 }
 
