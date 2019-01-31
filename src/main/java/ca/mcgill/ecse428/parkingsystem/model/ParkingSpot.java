@@ -311,9 +311,9 @@ public class ParkingSpot
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Review addReview(float aRating, String aComment, ParkingManager aParkingManager)
+  public Review addReview(float aRating, String aComment, ParkingManager aParkingManager, String id)
   {
-    return new Review(aRating, aComment, aParkingManager, this);
+    return new Review(aRating, aComment, aParkingManager, this, id);
   }
 
   public boolean addReview(Review aReview)
