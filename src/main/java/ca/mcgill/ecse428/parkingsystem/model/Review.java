@@ -3,8 +3,17 @@
 
 package ca.mcgill.ecse428.parkingsystem.model;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 // line 61 "../../../../../../../../ump/tmp788415/model.ump"
 // line 99 "../../../../../../../../ump/tmp788415/model.ump"
+@Entity
+@Table(name="review")
 public class Review
 {
 
@@ -70,6 +79,7 @@ public class Review
     return wasSet;
   }
 
+  @Id
   public String getPKey()
   {
     return pKey;
@@ -85,11 +95,15 @@ public class Review
     return comment;
   }
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "review_parkingManager")
   public ParkingManager getParkingManager()
   {
     return parkingManager;
   }
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "review_parkingSpot")
   public ParkingSpot getParkingSpot()
   {
     return parkingSpot;

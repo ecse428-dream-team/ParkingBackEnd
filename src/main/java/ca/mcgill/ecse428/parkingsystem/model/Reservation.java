@@ -4,8 +4,17 @@
 package ca.mcgill.ecse428.parkingsystem.model;
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 // line 49 "../../../../../../../../ump/tmp788415/model.ump"
 // line 93 "../../../../../../../../ump/tmp788415/model.ump"
+@Entity
+@Table(name="reservation")
 public class Reservation
 {
 
@@ -117,6 +126,7 @@ public class Reservation
     return wasSet;
   }
 
+  @Id
   public String getPKey()
   {
     return pKey;
@@ -152,16 +162,22 @@ public class Reservation
     return end_Time;
   }
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "reservation_user")
   public User getUser()
   {
     return user;
   }
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "reservation_parkingManager")
   public ParkingManager getParkingManager()
   {
     return parkingManager;
   }
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "reservation_parkingSpot")
   public ParkingSpot getParkingSpot()
   {
     return parkingSpot;

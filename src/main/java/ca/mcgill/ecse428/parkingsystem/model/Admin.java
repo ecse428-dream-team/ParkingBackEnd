@@ -3,8 +3,17 @@
 
 package ca.mcgill.ecse428.parkingsystem.model;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 // line 20 "../../../../../../../../ump/tmp788415/model.ump"
 // line 75 "../../../../../../../../ump/tmp788415/model.ump"
+@Entity
+@Table(name="admin")
 public class Admin extends Person
 {
 
@@ -32,7 +41,20 @@ public class Admin extends Person
   //------------------------
   // INTERFACE
   //------------------------
+  
+  @Id
+  public String getId() {
+	  return getUserID();
+  }
+  
+  public boolean setId(String newID) {
+	  setUserID(newID);
+	  return true;
+  }
+  
   /* Code from template association_GetOne */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "admin_parkingManager")
   public ParkingManager getParkingManager()
   {
     return parkingManager;
