@@ -2,19 +2,11 @@
 /*This code was generated using the UMPLE 1.29.1.4403.5bb429550 modeling language!*/
 
 package ca.mcgill.ecse428.parkingsystem.model;
+import java.util.*;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-// line 14 "../../../../../../../../ump/tmp864058/model.ump"
-// line 69 "../../../../../../../../ump/tmp864058/model.ump"
-@Entity
-@Table(name="user")
+// line 13 "../../../../../../../../ump/tmp788415/model.ump"
+// line 70 "../../../../../../../../ump/tmp788415/model.ump"
 public class User extends Person
 {
 
@@ -27,6 +19,7 @@ public class User extends Person
   private boolean isSeller;
 
   //User Associations
+  private ParkingManager parkingManager;
   private List<ParkingSpot> parkingSpots;
   private List<Reservation> reservations;
 
@@ -34,11 +27,16 @@ public class User extends Person
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail, ParkingManager aParkingManager, boolean aIsRenter, boolean aIsSeller)
+  public User(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail, boolean aIsRenter, boolean aIsSeller, ParkingManager aParkingManager)
   {
-    super(aFist_Name, aLast_Name, aUserID, aPassword, aEmail, aParkingManager);
+    super(aFist_Name, aLast_Name, aUserID, aPassword, aEmail);
     isRenter = aIsRenter;
     isSeller = aIsSeller;
+    boolean didAddParkingManager = setParkingManager(aParkingManager);
+    if (!didAddParkingManager)
+    {
+      throw new RuntimeException("Unable to create user due to parkingManager");
+    }
     parkingSpots = new ArrayList<ParkingSpot>();
     reservations = new ArrayList<Reservation>();
   }
@@ -46,11 +44,6 @@ public class User extends Person
   //------------------------
   // INTERFACE
   //------------------------
-  
-  @Id
-  public String getId() {
-	  return getUserID();
-  }
 
   public boolean setIsRenter(boolean aIsRenter)
   {
@@ -76,6 +69,11 @@ public class User extends Person
   public boolean getIsSeller()
   {
     return isSeller;
+  }
+  /* Code from template association_GetOne */
+  public ParkingManager getParkingManager()
+  {
+    return parkingManager;
   }
   /* Code from template association_GetMany */
   public ParkingSpot getParkingSpot(int index)
@@ -136,6 +134,25 @@ public class User extends Person
   {
     int index = reservations.indexOf(aReservation);
     return index;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setParkingManager(ParkingManager aParkingManager)
+  {
+    boolean wasSet = false;
+    if (aParkingManager == null)
+    {
+      return wasSet;
+    }
+
+    ParkingManager existingParkingManager = parkingManager;
+    parkingManager = aParkingManager;
+    if (existingParkingManager != null && !existingParkingManager.equals(aParkingManager))
+    {
+      existingParkingManager.removeUser(this);
+    }
+    parkingManager.addUser(this);
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfParkingSpots()
@@ -284,6 +301,12 @@ public class User extends Person
 
   public void delete()
   {
+    ParkingManager placeholderParkingManager = parkingManager;
+    this.parkingManager = null;
+    if(placeholderParkingManager != null)
+    {
+      placeholderParkingManager.removeUser(this);
+    }
     for(int i=parkingSpots.size(); i > 0; i--)
     {
       ParkingSpot aParkingSpot = parkingSpots.get(i - 1);
@@ -302,6 +325,7 @@ public class User extends Person
   {
     return super.toString() + "["+
             "isRenter" + ":" + getIsRenter()+ "," +
-            "isSeller" + ":" + getIsSeller()+ "]";
+            "isSeller" + ":" + getIsSeller()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "parkingManager = "+(getParkingManager()!=null?Integer.toHexString(System.identityHashCode(getParkingManager())):"null");
   }
 }

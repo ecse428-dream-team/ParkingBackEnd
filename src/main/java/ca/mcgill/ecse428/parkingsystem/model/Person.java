@@ -3,9 +3,9 @@
 
 package ca.mcgill.ecse428.parkingsystem.model;
 
-// line 26 "../../../../../../../../ump/tmp864058/model.ump"
-// line 79 "../../../../../../../../ump/tmp864058/model.ump"
-public class Person
+// line 25 "../../../../../../../../ump/tmp788415/model.ump"
+// line 80 "../../../../../../../../ump/tmp788415/model.ump"
+public abstract class Person
 {
 
   //------------------------
@@ -19,25 +19,17 @@ public class Person
   private String password;
   private String email;
 
-  //Person Associations
-  private ParkingManager parkingManager;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Person(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail, ParkingManager aParkingManager)
+  public Person(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail)
   {
     fist_Name = aFist_Name;
     last_Name = aLast_Name;
     userID = aUserID;
     password = aPassword;
     email = aEmail;
-    boolean didAddParkingManager = setParkingManager(aParkingManager);
-    if (!didAddParkingManager)
-    {
-      throw new RuntimeException("Unable to create person due to parkingManager");
-    }
   }
 
   //------------------------
@@ -108,45 +100,9 @@ public class Person
   {
     return email;
   }
-  /* Code from template association_GetOne */
-  public ParkingManager getParkingManager()
-  {
-    return parkingManager;
-  }
-  /* Code from template association_GetOne_clear */
-  protected void clear_parkingManager()
-  {
-    parkingManager = null;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setParkingManager(ParkingManager aParkingManager)
-  {
-    boolean wasSet = false;
-    if (aParkingManager == null)
-    {
-      return wasSet;
-    }
-
-    ParkingManager existingParkingManager = parkingManager;
-    parkingManager = aParkingManager;
-    if (existingParkingManager != null && !existingParkingManager.equals(aParkingManager))
-    {
-      existingParkingManager.removePerson(this);
-    }
-    parkingManager.addPerson(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
-  {
-    ParkingManager placeholderParkingManager = parkingManager;
-    this.parkingManager = null;
-    if(placeholderParkingManager != null)
-    {
-      placeholderParkingManager.removePerson(this);
-    }
-  }
+  {}
 
 
   public String toString()
@@ -156,7 +112,6 @@ public class Person
             "last_Name" + ":" + getLast_Name()+ "," +
             "userID" + ":" + getUserID()+ "," +
             "password" + ":" + getPassword()+ "," +
-            "email" + ":" + getEmail()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "parkingManager = "+(getParkingManager()!=null?Integer.toHexString(System.identityHashCode(getParkingManager())):"null");
+            "email" + ":" + getEmail()+ "]";
   }
 }

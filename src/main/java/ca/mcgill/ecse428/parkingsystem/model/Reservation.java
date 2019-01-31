@@ -4,14 +4,8 @@
 package ca.mcgill.ecse428.parkingsystem.model;
 import java.sql.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-// line 49 "../../../../../../../../ump/tmp864058/model.ump"
-// line 92 "../../../../../../../../ump/tmp864058/model.ump"
-@Entity
-@Table(name="reservation")
+// line 49 "../../../../../../../../ump/tmp788415/model.ump"
+// line 93 "../../../../../../../../ump/tmp788415/model.ump"
 public class Reservation
 {
 
@@ -123,7 +117,6 @@ public class Reservation
     return wasSet;
   }
 
-  @Id
   public String getPKey()
   {
     return pKey;

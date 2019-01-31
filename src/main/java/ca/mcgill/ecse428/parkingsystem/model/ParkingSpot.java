@@ -2,19 +2,11 @@
 /*This code was generated using the UMPLE 1.29.1.4403.5bb429550 modeling language!*/
 
 package ca.mcgill.ecse428.parkingsystem.model;
+import java.util.*;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-// line 35 "../../../../../../../../ump/tmp864058/model.ump"
-// line 84 "../../../../../../../../ump/tmp864058/model.ump"
-@Entity
-@Table(name="parkingspot")
+// line 35 "../../../../../../../../ump/tmp788415/model.ump"
+// line 85 "../../../../../../../../ump/tmp788415/model.ump"
 public class ParkingSpot
 {
 
@@ -114,7 +106,6 @@ public class ParkingSpot
     return wasSet;
   }
 
-  @Id
   public String getPKey()
   {
     return pKey;
@@ -311,9 +302,9 @@ public class ParkingSpot
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Review addReview(float aRating, String aComment, ParkingManager aParkingManager, String id)
+  public Review addReview(String aPKey, float aRating, String aComment, ParkingManager aParkingManager)
   {
-    return new Review(aRating, aComment, aParkingManager, this, id);
+    return new Review(aPKey, aRating, aComment, aParkingManager, this);
   }
 
   public boolean addReview(Review aReview)
