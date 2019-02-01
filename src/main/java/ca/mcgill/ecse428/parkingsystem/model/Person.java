@@ -3,8 +3,12 @@
 
 package ca.mcgill.ecse428.parkingsystem.model;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 // line 25 "../../../../../../../../ump/tmp788415/model.ump"
 // line 80 "../../../../../../../../ump/tmp788415/model.ump"
+@MappedSuperclass
 public abstract class Person
 {
 
@@ -86,6 +90,7 @@ public abstract class Person
     return last_Name;
   }
 
+  @Id
   public String getUserID()
   {
     return userID;

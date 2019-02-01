@@ -71,16 +71,7 @@ public class User extends Person {
 	// ------------------------
 	// INTERFACE
 	// ------------------------
-
-	@Id
-	public String getId() {
-		return getUserID();
-	}
-
-	public boolean setId(String newID) {
-		setUserID(newID);
-		return true;
-	}
+	
 
 	public boolean setIsRenter(boolean aIsRenter) {
 		boolean wasSet = false;

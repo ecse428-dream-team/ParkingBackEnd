@@ -42,15 +42,6 @@ public class Admin extends Person
   // INTERFACE
   //------------------------
   
-  @Id
-  public String getId() {
-	  return getUserID();
-  }
-  
-  public boolean setId(String newID) {
-	  setUserID(newID);
-	  return true;
-  }
   
   /* Code from template association_GetOne */
   @ManyToOne(fetch = FetchType.LAZY)
