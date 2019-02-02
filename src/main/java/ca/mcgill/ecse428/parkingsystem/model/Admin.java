@@ -42,7 +42,6 @@ public class Admin extends Person
   // INTERFACE
   //------------------------
   
-  
   /* Code from template association_GetOne */
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinTable(name = "admin_parkingManager")

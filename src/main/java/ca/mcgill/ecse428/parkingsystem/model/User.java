@@ -11,11 +11,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 // line 13 "../../../../../../../../ump/tmp788415/model.ump"
 // line 70 "../../../../../../../../ump/tmp788415/model.ump"
@@ -29,10 +33,13 @@ public class User extends Person {
 	// ------------------------
 
 	// User Attributes
+	@JsonProperty("isRenter")
 	private boolean isRenter;
+	@JsonProperty("isSeller")
 	private boolean isSeller;
 
 	// User Associations
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private ParkingManager parkingManager;
 	private List<ParkingSpot> parkingSpots;
 	private List<Reservation> reservations;
@@ -42,11 +49,11 @@ public class User extends Person {
 	// ------------------------
 	// Necessary for hibernate. Should never be used.
 	// Roger Z 01/31/2019
-	
+
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
 	}
-	
+
 	public void setParkingSpots(List<ParkingSpot> parkingSpots) {
 		this.parkingSpots = parkingSpots;
 	}
@@ -55,8 +62,12 @@ public class User extends Person {
 	// CONSTRUCTOR
 	// ------------------------
 
-	public User(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail,
-			boolean aIsRenter, boolean aIsSeller, ParkingManager aParkingManager) {
+	@JsonCreator
+	public User(@JsonProperty("firstName") String aFist_Name, @JsonProperty("lastName") String aLast_Name,
+			@JsonProperty("id") String aUserID, @JsonProperty("password") String aPassword,
+			@JsonProperty("email") String aEmail, @JsonProperty("isRenter") boolean aIsRenter,
+			@JsonProperty("isSeller") boolean aIsSeller,
+			@JsonProperty("parkingManager") ParkingManager aParkingManager) {
 		super(aFist_Name, aLast_Name, aUserID, aPassword, aEmail);
 		isRenter = aIsRenter;
 		isSeller = aIsSeller;
@@ -71,7 +82,6 @@ public class User extends Person {
 	// ------------------------
 	// INTERFACE
 	// ------------------------
-	
 
 	public boolean setIsRenter(boolean aIsRenter) {
 		boolean wasSet = false;

@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 // line 4 "../../../../../../../../ump/tmp788415/model.ump"
 // line 104 "../../../../../../../../ump/tmp788415/model.ump"
 // line 110 "../../../../../../../../ump/tmp788415/model.ump"
@@ -26,7 +29,7 @@ public class ParkingManager {
 	// ------------------------
 
 	// ParkingManager Attributes
-	private String pKey;
+	@JsonProperty("pkey") private String pKey;
 
 	// ParkingManager Associations
 	private List<User> users;
@@ -65,7 +68,8 @@ public class ParkingManager {
 	// CONSTRUCTOR
 	// ------------------------
 
-	public ParkingManager(String aPKey) {
+	@JsonCreator
+	public ParkingManager(@JsonProperty("pkey") String aPKey) {
 		pKey = aPKey;
 		users = new ArrayList<User>();
 		admins = new ArrayList<Admin>();

@@ -6,18 +6,18 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ca.mcgill.ecse428.parkingsystem.model.User;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 
 @Repository
-public class UserRepository {
+public class ParkingManagerRepository {
 	
 	@Autowired
 	EntityManager entityManager;
 	
 	@Transactional
-	public User addUser(User user) {
-		entityManager.persist(user);
-		return user;
+	public ParkingManager addManager(ParkingManager manager) {
+		entityManager.persist(manager);
+		return manager;
 	}
 
 }
