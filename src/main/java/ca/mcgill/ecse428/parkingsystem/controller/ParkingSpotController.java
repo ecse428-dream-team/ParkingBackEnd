@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
-import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
+import ca.mcgill.ecse428.parkingsystem.repository.ParkingSpotRepository;
 
 @RestController
-@RequestMapping("/manager")
-public class ParkingManagerController {
-	
+@RequestMapping("/spot")
+public class ParkingSpotController {
+
 	@Autowired
-	ParkingManagerRepository repository;
+	ParkingSpotRepository repository;
 
     @GetMapping
     public ResponseEntity<String> hello() {
@@ -25,10 +25,7 @@ public class ParkingManagerController {
     }
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ParkingManager createUser(@RequestBody ParkingManager manager) {
-	    return repository.addManager(manager);
+	public ParkingSpot addParkingSpot(@RequestBody ParkingSpot ps) {
+	    return repository.addParkingSpot(ps);
 	}
-	
-	
 }
-

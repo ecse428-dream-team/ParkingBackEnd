@@ -17,7 +17,7 @@ public abstract class Person
   //------------------------
 
   //Person Attributes
-  private String fist_Name;
+  private String first_name;
   private String last_Name;
   private String userID;
   private String password;
@@ -27,23 +27,25 @@ public abstract class Person
   // CONSTRUCTOR
   //------------------------
 
-  public Person(String aFist_Name, String aLast_Name, String aUserID, String aPassword, String aEmail)
+  public Person(String afirst_name, String aLast_Name, String aUserID, String aPassword, String aEmail)
   {
-    fist_Name = aFist_Name;
+    first_name = afirst_name;
     last_Name = aLast_Name;
     userID = aUserID;
     password = aPassword;
     email = aEmail;
   }
 
+  public Person(){}
+
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setFist_Name(String aFist_Name)
+  public boolean setfirst_name(String afirst_name)
   {
     boolean wasSet = false;
-    fist_Name = aFist_Name;
+    first_name = afirst_name;
     wasSet = true;
     return wasSet;
   }
@@ -80,9 +82,9 @@ public abstract class Person
     return wasSet;
   }
 
-  public String getFist_Name()
+  public String getfirst_name()
   {
-    return fist_Name;
+    return first_name;
   }
 
   public String getLast_Name()
@@ -113,7 +115,7 @@ public abstract class Person
   public String toString()
   {
     return super.toString() + "["+
-            "fist_Name" + ":" + getFist_Name()+ "," +
+            "first_name" + ":" + getfirst_name()+ "," +
             "last_Name" + ":" + getLast_Name()+ "," +
             "userID" + ":" + getUserID()+ "," +
             "password" + ":" + getPassword()+ "," +

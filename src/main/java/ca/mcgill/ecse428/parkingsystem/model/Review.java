@@ -51,6 +51,9 @@ public class Review
     }
   }
 
+  public Review() {
+
+  }
   //------------------------
   // INTERFACE
   //------------------------

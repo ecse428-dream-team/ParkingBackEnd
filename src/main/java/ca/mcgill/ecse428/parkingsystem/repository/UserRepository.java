@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import ca.mcgill.ecse428.parkingsystem.model.User;
 
+import java.util.List;
+
 @Repository
 public class UserRepository {
 	
@@ -19,5 +21,35 @@ public class UserRepository {
 		entityManager.persist(user);
 		return user;
 	}
+
+	@Transactional
+    public List<User> getUserByFirstName(String firstName) {
+	    List users = entityManager.createQuery("SELECT u FROM User u WHERE u.first_name LIKE :custName", User.class)
+                .setParameter("custName", firstName)
+                .setMaxResults(1)
+                .getResultList();
+
+	    return users;
+    }
+
+    @Transactional
+    public List<User> getUserByLastName(String lastName) {
+        List users = entityManager.createQuery("SELECT u FROM User u WHERE u.last_Name LIKE :custName", User.class)
+                .setParameter("custName", lastName)
+                .setMaxResults(1)
+                .getResultList();
+
+        return users;
+    }
+
+    @Transactional
+    public List<User> getUserById(String id) {
+        List users = entityManager.createQuery("SELECT u FROM User u WHERE u.userID LIKE :custId", User.class)
+                .setParameter("custId", id)
+                .setMaxResults(1)
+                .getResultList();
+
+        return users;
+    }
 
 }

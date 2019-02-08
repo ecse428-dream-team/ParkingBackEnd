@@ -17,6 +17,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 // line 35 "../../../../../../../../ump/tmp788415/model.ump"
 // line 85 "../../../../../../../../ump/tmp788415/model.ump"
 @Entity
@@ -36,9 +40,11 @@ public class ParkingSpot {
 	private float current_Price;
 
 	// ParkingSpot Associations
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private User user;
 	private List<Reservation> reservations;
 	private List<Review> reviews;
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private ParkingManager parkingManager;
 
 	// ------------------------
@@ -46,11 +52,11 @@ public class ParkingSpot {
 	// ------------------------
 	// Necessary for hibernate. Should never be used.
 	// Roger Z 01/31/2019
-	
+
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
 	}
-	
+
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
@@ -59,8 +65,11 @@ public class ParkingSpot {
 	// CONSTRUCTOR
 	// ------------------------
 
-	public ParkingSpot(String aPKey, int aStreet_Number, String aSteet_Name, String aPostal_Code, float aAvg_Rating,
-			float aCurrent_Price, User aUser, ParkingManager aParkingManager) {
+	@JsonCreator
+	public ParkingSpot(@JsonProperty("pkey") String aPKey, @JsonProperty("addressNumber") int aStreet_Number,
+			@JsonProperty("streetName") String aSteet_Name, @JsonProperty("postalCode") String aPostal_Code,
+			@JsonProperty("avgRating") float aAvg_Rating, @JsonProperty("currentPrice") float aCurrent_Price,
+			@JsonProperty("user") User aUser,@JsonProperty("parkingManager") ParkingManager aParkingManager) {
 		pKey = aPKey;
 		street_Number = aStreet_Number;
 		steet_Name = aSteet_Name;
@@ -78,6 +87,10 @@ public class ParkingSpot {
 			throw new RuntimeException("Unable to create parkingSpot due to parkingManager");
 		}
 	}
+
+	public ParkingSpot() {
+
+    }
 
 	// ------------------------
 	// INTERFACE
