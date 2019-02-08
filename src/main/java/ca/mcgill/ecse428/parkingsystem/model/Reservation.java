@@ -66,6 +66,10 @@ public class Reservation
     }
   }
 
+  public Reservation() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

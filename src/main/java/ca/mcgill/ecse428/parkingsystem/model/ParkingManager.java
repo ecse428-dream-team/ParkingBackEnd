@@ -78,6 +78,10 @@ public class ParkingManager {
 		reviews = new ArrayList<Review>();
 	}
 
+	public ParkingManager() {
+
+    }
+
 	// ------------------------
 	// INTERFACE
 	// ------------------------

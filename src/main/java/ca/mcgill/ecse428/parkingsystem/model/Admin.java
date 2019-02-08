@@ -43,6 +43,10 @@ public class Admin extends Person {
 		}
 	}
 
+	public Admin() {
+
+    }
+
 	// ------------------------
 	// INTERFACE
 	// ------------------------
