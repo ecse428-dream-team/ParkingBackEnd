@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -29,7 +30,9 @@ public class Reservation {
 	// Reservation Attributes
 	private String pKey;
 	private String vehicle_Plate;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date start_Date;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date end_Date;
 	private float price_Paid;
 	private int start_Time;
@@ -48,7 +51,8 @@ public class Reservation {
 
 	@JsonCreator
 	public Reservation(@JsonProperty("pkey") String aPKey, @JsonProperty("plate") String aVehicle_Plate,
-			@JsonProperty("startDate") Date aStart_Date, @JsonProperty("endDate") Date aEnd_Date,
+			@JsonProperty("startDate") @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date aStart_Date,
+			@JsonProperty("endDate") @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date aEnd_Date,
 			@JsonProperty("pricePaid") float aPrice_Paid, @JsonProperty("startTime") int aStart_Time,
 			@JsonProperty("endTime") int aEnd_Time, @JsonProperty("user") User aUser,
 			@JsonProperty("parkingManager") ParkingManager aParkingManager,
