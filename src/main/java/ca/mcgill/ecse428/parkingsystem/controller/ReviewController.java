@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.Reservation;
-import ca.mcgill.ecse428.parkingsystem.repository.ReservationRepository;
+import ca.mcgill.ecse428.parkingsystem.model.Review;
+import ca.mcgill.ecse428.parkingsystem.repository.ReviewRepository;
 
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
 	
 	@Autowired
-	ReservationRepository repository;
+	ReviewRepository repository;
 	
     @GetMapping
     public String hello() {
@@ -23,8 +24,8 @@ public class ReviewController {
     }
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public Reservation addReservation(@RequestBody Reservation rsv) {
-	    return repository.addReservation(rsv);
+	public Review addReview(@RequestBody Review rvw) {
+	    return repository.addReview(rvw);
 	}
 	
 
