@@ -33,7 +33,7 @@ public class ParkingManager {
 	// ------------------------
 
 	// ParkingManager Attributes
-	@JsonProperty("pkey") private String pKey;
+	@JsonProperty("pkey") private String PKey;
 
 	// ParkingManager Associations
 	private List<User> users;
@@ -74,7 +74,7 @@ public class ParkingManager {
 
 	@JsonCreator
 	public ParkingManager(@JsonProperty("pkey") String aPKey) {
-		pKey = aPKey;
+		PKey = aPKey;
 		users = new ArrayList<User>();
 		admins = new ArrayList<Admin>();
 		parkingSpots = new ArrayList<ParkingSpot>();
@@ -93,14 +93,14 @@ public class ParkingManager {
 
 	public boolean setPKey(String aPKey) {
 		boolean wasSet = false;
-		pKey = aPKey;
+		PKey = aPKey;
 		wasSet = true;
 		return wasSet;
 	}
 
 	@Id
 	public String getPKey() {
-		return pKey;
+		return PKey;
 	}
 
 	/* Code from template association_GetMany */

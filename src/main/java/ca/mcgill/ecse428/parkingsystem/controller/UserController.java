@@ -1,18 +1,15 @@
 package ca.mcgill.ecse428.parkingsystem.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
+import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ca.mcgill.ecse428.parkingsystem.model.User;
 import ca.mcgill.ecse428.parkingsystem.repository.UserRepository;
@@ -25,8 +22,21 @@ public class UserController {
 	UserRepository repository;
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
-	public User addUser(@RequestBody User user) {
-		return repository.addUser(user);
+	public ResponseEntity addUser(@RequestBody User user) {
+
+	    List<User> users = repository.getAllUsers();
+
+	    for(User currUser: users) {
+	        if(currUser.getUserID().equals(user.getUserID())) {
+	            return new ResponseEntity("User with that id already exists", HttpStatus.BAD_REQUEST);
+            } else if(currUser.getEmail().equals(user.getEmail())) {
+                return new ResponseEntity("User with that email already exists", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        repository.addUser(user);
+
+		return new ResponseEntity("User Created", HttpStatus.OK);
 
 	}
 
@@ -35,6 +45,48 @@ public class UserController {
 		List<User> users = repository.getAllUsers();
 		return new ResponseEntity<List<User>>(users, null, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<User> authenticateUser(
+            @RequestHeader("Authorization") String authorization
+    ) {
+        if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
+            // Authorization: Basic base64credentials
+            String base64Credentials = authorization.substring("Basic".length()).trim();
+            byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+            String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+            // credentials = username:password
+            String[] values = credentials.split(":", 2);
+
+            User user = authenticate(values[0], values[1]);
+
+            if(user != null) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private User authenticate(String username, String password) {
+	    if(username != null && password != null) {
+	        try {
+                User user = repository.getUserById(username);
+                if(user.getPassword().equals(password)) {
+                    return user;
+                } else {
+                    return null;
+                }
+            } catch(Exception e) {
+	            return null;
+            }
+        } else {
+	        return null;
+        }
+    }
 
 	@RequestMapping(value = "/firstname/{firstname}", method = RequestMethod.GET)
     public List<User> getUserByFirstName(
@@ -49,7 +101,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
-    public List<User> getUserById(
+    public User getUserById(
             @PathVariable("id") String id) {
         return repository.getUserById(id);
     }

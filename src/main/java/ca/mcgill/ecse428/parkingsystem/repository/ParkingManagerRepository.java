@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import ca.mcgill.ecse428.parkingsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,16 +26,21 @@ public class ParkingManagerRepository {
 	}
 	
 	@Transactional
-	public ParkingManager getParkingManager(String id)
+	public ParkingManager getParkingManager(String pKey)
 	{
-		ParkingManager foundParkingManager = entityManager.find(ParkingManager.class, id);
-		return foundParkingManager;
+        List<ParkingManager> parkingManager = entityManager.createQuery("SELECT p FROM ParkingManager p WHERE p.PKey LIKE :parkingManagerKey", ParkingManager.class)
+                .setParameter("parkingManagerKey", pKey)
+                .setMaxResults(1)
+                .getResultList();
+
+		return parkingManager.get(0);
 	}
 
 	@Transactional
 	public List<ParkingManager> getParkingManagers(){
-		List<ParkingManager> ParkingManagers = new ArrayList<ParkingManager>(); 
-		ParkingManagers = entityManager.createQuery("SELECT a FROM ParkingManager a").getResultList();
-		return ParkingManagers;
+        List<ParkingManager> parkingManagers = entityManager.createQuery("SELECT p FROM ParkingManager p", ParkingManager.class)
+                .getResultList();
+
+		return parkingManagers;
 	}
 }
