@@ -54,6 +54,8 @@ public class Review {
 			throw new RuntimeException("Unable to create review due to parkingSpot");
 		}
 	}
+	
+	public Review() {}
 
 	// ------------------------
 	// INTERFACE

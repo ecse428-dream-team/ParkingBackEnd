@@ -20,4 +20,11 @@ public class AdminRepository {
 		return adm;
 	}
 	
+	@Transactional
+	public Admin getAdmin(String id)
+	{
+		Admin foundAdmin = entityManager.find(Admin.class, id);
+		return foundAdmin;
+	}
+	
 }
