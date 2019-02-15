@@ -15,13 +15,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 // line 4 "../../../../../../../../ump/tmp788415/model.ump"
 // line 104 "../../../../../../../../ump/tmp788415/model.ump"
 // line 110 "../../../../../../../../ump/tmp788415/model.ump"
 @Entity
 @Table(name = "parkingmanager")
+//An Khang error trying to get manager, serializer problem
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParkingManager {
 
 	// ------------------------
@@ -81,6 +85,7 @@ public class ParkingManager {
 	public ParkingManager() {
 
     }
+
 
 	// ------------------------
 	// INTERFACE

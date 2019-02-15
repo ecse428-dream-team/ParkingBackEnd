@@ -1,11 +1,15 @@
 package ca.mcgill.ecse428.parkingsystem.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ca.mcgill.ecse428.parkingsystem.model.Admin;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 
 import java.util.List;
@@ -51,5 +55,13 @@ public class UserRepository {
 
         return users;
     }
+
+
+	@Transactional
+	public List<User> getAllUsers(){
+		List<User> users = new ArrayList<User>(); 
+		users = entityManager.createQuery("SELECT a FROM User a").getResultList();
+		return users;
+	}
 
 }

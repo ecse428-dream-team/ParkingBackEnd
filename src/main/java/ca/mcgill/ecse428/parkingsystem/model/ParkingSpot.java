@@ -42,6 +42,7 @@ public class ParkingSpot {
 	// ParkingSpot Associations
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private User user;
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private List<Reservation> reservations;
 	private List<Review> reviews;
 	@JsonProperty(access = Access.WRITE_ONLY)
