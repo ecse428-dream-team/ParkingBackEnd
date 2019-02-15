@@ -89,15 +89,64 @@ public class UserControllerTests {
         // Parking manager
         String pm = "{\"pkey\":1}";
 
-        // Create some users
-        User user1 = new User(String "Tianhan", String "Jiang", String "123456789", String );
+        // Create 3 users and post them onto the local databse
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
 
-        // Create user accounts for these new users
-            testRepository.addUser(user1);
+
+        String user1 = "{\"firstName\":\"Owais\"," +
+                "\"lastName\":\"Khan\"," +
+                "\"id\":\"260617913\"," +
+                "\"password\":\"something\"," +
+                "\"email\":\"123@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"1\"}}";
+
+        ResultActions resultUser1 = mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String user2 = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"456@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"1\"}}";
+
+        ResultActions resultUser2 = mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String user3 = "{\"firstName\":\"Spongebob\"," +
+                "\"lastName\":\"Squarepants\"," +
+                "\"id\":\"260617931\"," +
+                "\"password\":\"pineapple\"," +
+                "\"email\":\"sea@gmail.com\"," +
+                "\"isRenter\":\"false\"," +
+                "\"isSeller\":\"true\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"1\"}}";
+
+        ResultActions resultUser3 = mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user3))
+                .andDo(print())
+                .andExpect(status().isOk());
 
         // Get all users
 
-        // Check
+        // Check if responses match
 
 
     }
@@ -114,6 +163,11 @@ public class UserControllerTests {
 
     @Test
     public void getUserByIDTest() throws Exception {
+
+    }
+
+    @Test
+    public void userLoginTest() throws Exception {
 
     }
 }
