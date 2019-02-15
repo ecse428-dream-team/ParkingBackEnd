@@ -21,6 +21,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.http.ResponseEntity;
 
+import javax.validation.constraints.AssertTrue;
+import java.util.List;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -89,7 +92,7 @@ public class UserControllerTests {
         // Parking manager
         String pm = "{\"pkey\":1}";
 
-        // Create 3 users and post them onto the local databse
+        // Create 2 users and post them onto the local database
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
@@ -128,27 +131,15 @@ public class UserControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        String user3 = "{\"firstName\":\"Spongebob\"," +
-                "\"lastName\":\"Squarepants\"," +
-                "\"id\":\"260617931\"," +
-                "\"password\":\"pineapple\"," +
-                "\"email\":\"sea@gmail.com\"," +
-                "\"isRenter\":\"false\"," +
-                "\"isSeller\":\"true\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-
-        ResultActions resultUser3 = mockMvc.perform(post("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(user3))
-                .andDo(print())
-                .andExpect(status().isOk());
+        // Correct result
+        List<User> allUsers = ;
 
         // Get all users
+        List<User> users;
+        users = testRepository.getAllUsers();
 
         // Check if responses match
-
-
+        AssertTrue(allUsers.equals(users));
     }
 
     @Test
