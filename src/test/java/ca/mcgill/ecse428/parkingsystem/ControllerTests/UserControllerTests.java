@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.model.User;
+import ca.mcgill.ecse428.parkingsystem.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.http.ResponseEntity;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -26,6 +29,9 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository testRepository;
 
     @Test
     public void shouldReturnHello() throws Exception {
@@ -79,7 +85,21 @@ public class UserControllerTests {
 
     @Test
     public void getAllUsersTest() throws Exception {
-        
+
+        // Parking manager
+        String pm = "{\"pkey\":1}";
+
+        // Create some users
+        User user1 = new User(String "Tianhan", String "Jiang", String "123456789", String );
+
+        // Create user accounts for these new users
+            testRepository.addUser(user1);
+
+        // Get all users
+
+        // Check
+
+
     }
 
     @Test
