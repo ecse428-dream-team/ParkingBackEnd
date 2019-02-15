@@ -79,6 +79,7 @@ public class User extends Person {
 		reservations = new ArrayList<Reservation>();
 	}
 
+	public User() {}
 	// ------------------------
 	// INTERFACE
 	// ------------------------

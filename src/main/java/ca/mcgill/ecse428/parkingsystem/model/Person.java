@@ -35,6 +35,9 @@ public abstract class Person
     password = aPassword;
     email = aEmail;
   }
+  
+  public Person(){}
+
 
   //------------------------
   // INTERFACE
