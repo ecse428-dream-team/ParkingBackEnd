@@ -38,9 +38,6 @@ public abstract class Person
   
   public Person(){}
 
-
-  public Person(){}
-
   //------------------------
   // INTERFACE
   //------------------------
