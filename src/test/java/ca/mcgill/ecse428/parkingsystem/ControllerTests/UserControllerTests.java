@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.http.ResponseEntity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -76,6 +77,23 @@ public class UserControllerTests {
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
     }
 
+    @Test
+    public void getAllUsersTest() throws Exception {
+        
+    }
 
+    @Test
+    public void getUserByFirstNameTest() throws Exception {
 
+    }
+
+    @Test
+    public void getUserByLastNameTest() throws Exception {
+
+    }
+
+    @Test
+    public void getUserByIDTest() throws Exception {
+
+    }
 }
