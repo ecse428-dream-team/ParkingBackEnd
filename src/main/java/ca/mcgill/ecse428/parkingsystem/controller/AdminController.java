@@ -23,7 +23,7 @@ public class AdminController {
 	@Autowired
 	AdminRepository repository;
 	
-    @GetMapping(path="/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path="/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Admin> getAdmin(@PathVariable String id) {
     	
     	Admin adminFound = repository.getAdmin(id);
