@@ -42,5 +42,4 @@ public class AdminController {
 	public Admin addAdmin(@RequestBody Admin adm) {
 	    return repository.addAdmin(adm);
 	}
-
 }
