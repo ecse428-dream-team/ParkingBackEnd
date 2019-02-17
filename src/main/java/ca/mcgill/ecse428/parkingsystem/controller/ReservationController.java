@@ -41,5 +41,16 @@ public class ReservationController {
 	public Reservation addReservation(@RequestBody Reservation rsv) {
 		return repository.addReservation(rsv);
 	}
-
+	
+	// Need to check if annotations are correct!! 
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	public Boolean deleteReservationFromTable(@PathVariable String pKey) {
+		return repository.deleteReservationFromTable(pKey);
+	}
+	
+	// Need to check if annotations are correct!!
+	@PostMapping(consumes = "application/json", produces = "application/json")
+	public Boolean cancelReservation(@PathVariable String pKey) {
+		return repository.cancelReservation(pKey);
+	}
 }

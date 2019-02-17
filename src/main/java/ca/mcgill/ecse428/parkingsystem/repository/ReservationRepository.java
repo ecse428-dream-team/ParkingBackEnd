@@ -37,4 +37,45 @@ public class ReservationRepository {
 		Reservations = entityManager.createQuery("SELECT a FROM Reservation a").getResultList();
 		return Reservations;
 	}
+	
+	// All methods below pertains to the "A seller can cancel a reservation" story
+	// 	1) Add functionality to let user cancel their the reservation
+	//	2) Create the Backend functionality to delete the data from the table
+	//	3) Vertify the system so the reservation spot should be available
+	
+	@Transactional
+	public Boolean deleteReservationFromTable(String pKey) {
+		Boolean isDeleted = false; 
+		Reservation retrievedReservation = entityManager.find(Reservation.class, pKey);
+		if (retrievedReservation != null) {
+			entityManager.remove(retrievedReservation);
+			isDeleted = true;
+			return isDeleted;
+		}
+		System.out.println("\n" + "The specific reservation could not be found. Can not delete null reservation!" + "\n");
+		return isDeleted;
+	}
+	
+	@Transactional
+	public Boolean cancelReservation(String pKey) {
+		Boolean isCanceled = false;
+		Reservation aReservation = entityManager.find(Reservation.class, pKey);
+		if (aReservation != null) {
+			aReservation.setEnd_Date(null);
+			aReservation.setStart_Date(null);
+			aReservation.setEnd_Time(0);
+			aReservation.setStart_Time(0);
+			aReservation.setPrice_Paid(0);
+			aReservation.setVehicle_Plate(null);
+			// deleting object associations and itself from whole system
+			// not sure if this function is needed to realize the logic of canceling a reservation
+			// could someone verify this? 
+			aReservation.delete(); 
+			entityManager.persist(aReservation);
+			isCanceled = true;
+			return isCanceled;
+		}
+		System.out.println("\n" + "Could not cancel this reservation since it was already null!" + "\n");
+		return isCanceled;
+	}
 }
