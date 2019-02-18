@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 import ca.mcgill.ecse428.parkingsystem.repository.UserRepository;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.http.ResponseEntity;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.AssertTrue;
 import java.util.List;
 
@@ -34,7 +36,10 @@ public class UserControllerTests {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserRepository testRepository;
+    UserRepository mockRepository;
+
+    @Autowired
+    EntityManager mockEntityManager;
 
     @Test
     public void shouldReturnHello() throws Exception {
@@ -90,56 +95,41 @@ public class UserControllerTests {
     public void getAllUsersTest() throws Exception {
 
         // Parking manager
+        ParkingManager mockParkingManager = new ParkingManager("1");
         String pm = "{\"pkey\":1}";
 
-        // Create 2 users and post them onto the local database
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
                 .andDo(print());
 
+        // Create 2 users
+        User user1 = new User("Tianhan", "Jiang",
+                "260795887", "password",
+                "email1@gmail.com", true,
+                false, mockParkingManager);
 
-        String user1 = "{\"firstName\":\"Owais\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617913\"," +
-                "\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
+        User user2 = new User("Dave", "Jiang",
+                "260795888", "wordpass",
+                "email2@gmail.com", false,
+                true, mockParkingManager);
 
-        ResultActions resultUser1 = mockMvc.perform(post("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(user1))
-                .andDo(print())
-                .andExpect(status().isOk());
+        // Add them to the local database
+        mockRepository.addUser(user1);
+        mockRepository.addUser(user2);
 
-        String user2 = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"456@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-
-        ResultActions resultUser2 = mockMvc.perform(post("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(user2))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        // Correct result
-        List<User> allUsers = ;
+        // The correct result
+        List<User> allUsers = null;
+        allUsers.add(user1);
+        allUsers.add(user2);
 
         // Get all users
-        List<User> users;
-        users = testRepository.getAllUsers();
+        ResultActions getAllResult = mockMvc.perform(get("/user/all")
+                .contentType(MediaType.APPLICATION_JSON));
 
         // Check if responses match
-        AssertTrue(allUsers.equals(users));
+        MvcResult resultBody = getAllResult.andReturn();
+        assertTrue(resultBody.getResponse().getContentAsString().equals(allUsers.toString()));
     }
 
     @Test
