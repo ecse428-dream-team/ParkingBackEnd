@@ -25,7 +25,6 @@ public class ParkingSpotController {
 	
 	@GetMapping(path = "/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ParkingSpot> getParkingSpot(@PathVariable String id) {
-
 		ParkingSpot ParkingSpotFound = repository.getParkingSpot(id);
 		return new ResponseEntity<ParkingSpot>(ParkingSpotFound, null, HttpStatus.OK);
 	}
@@ -39,5 +38,28 @@ public class ParkingSpotController {
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ParkingSpot addParkingSpot(@RequestBody ParkingSpot ps) {
 	    return repository.addParkingSpot(ps);
+	}
+	
+	
+	
+	// All methods below here pertains to the newly added repository methods for general search and advanced searches
+	@GetMapping(path = "/general", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<ParkingSpot>> generalSearch() {
+		return new ResponseEntity<List<ParkingSpot>>(repository.generalSearch(), null, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/advance/search1/{field}/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<ParkingSpot>> advancedStringFieldSearch(@PathVariable String field, @PathVariable String value) {
+		return new ResponseEntity<List<ParkingSpot>>(repository.advancedStringFieldSearch(field, value), null, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/advance/search2/{field}/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<ParkingSpot>> advancedFloatFieldSearch(@PathVariable String field, @PathVariable float value) {
+		return new ResponseEntity<List<ParkingSpot>>(repository.advancedFloatFieldSearch(field, value), null, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/advance/search3/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<ParkingSpot>> advancedStringFieldSearch(@PathVariable int value) {
+		return new ResponseEntity<List<ParkingSpot>>(repository.advancedSearchByStreetNum(value), null, HttpStatus.OK);
 	}
 }
