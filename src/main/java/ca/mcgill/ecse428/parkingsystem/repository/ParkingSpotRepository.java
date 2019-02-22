@@ -43,7 +43,14 @@ public class ParkingSpotRepository {
 		return ParkingSpots;
 	}
 	
+	// Delete method(s)
 	
+	@Transactional
+	public void deleteSpot(ParkingSpot entity) {
+		entityManager.remove(entity);
+	}
+	
+	// End Delete method(s)
 	
 	// All methods below here pertains to the story "A renter should be able to browse available parking spots"
 	@Transactional

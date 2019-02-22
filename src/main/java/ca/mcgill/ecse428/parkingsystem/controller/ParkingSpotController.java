@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,20 @@ public class ParkingSpotController {
 	    return repository.addParkingSpot(ps);
 	}
 	
+	// Method(s) below is for deletion of Parking Spot object from database.
+	
+	// this method only deletes the parking spot, not any reviews or reservations attached
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<Void> deleteParkingSpot(@PathVariable String id) {
+		ParkingSpot delSpot = repository.getParkingSpot(id);
+		repository.deleteSpot(delSpot);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// this method deletes the parking spot, as well as all reviews and reservations associated with it
+	
+	
+	// End delete method(s)
 	
 	
 	// All methods below here pertains to the newly added repository methods for general search and advanced searches
