@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.repository.AdminRepository;
 
 @RestController
@@ -42,4 +44,17 @@ public class AdminController {
 	public Admin addAdmin(@RequestBody Admin adm) {
 	    return repository.addAdmin(adm);
 	}
+	
+	// Method(s) below is for deletion of an admin object from database.
+	
+	// this method only deletes the admin
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<Void> deleteAdmin(@PathVariable String id) {
+		Admin delAdmin = repository.getAdmin(id);
+		repository.deleteAdmin(delAdmin);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// End delete method(s)
+	
 }

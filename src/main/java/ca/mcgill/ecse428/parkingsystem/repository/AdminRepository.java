@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 
 @Repository
 public class AdminRepository {
@@ -36,4 +37,14 @@ public class AdminRepository {
 		admins = entityManager.createQuery("SELECT a FROM Admin a").getResultList();
 		return admins;
 	}
+	
+	// Delete method(s)
+	
+	@Transactional
+	public void deleteAdmin(Admin entity) {
+		entityManager.remove(entity);
+	}
+	
+	// End Delete method(s)
+	
 }
