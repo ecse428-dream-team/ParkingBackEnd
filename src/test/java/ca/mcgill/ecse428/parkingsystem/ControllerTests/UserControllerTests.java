@@ -164,31 +164,146 @@ public class UserControllerTests {
     public void getUserByFirstNameTest() throws Exception {
 
         // Parking manager
-        ParkingManager mockParkingManager = new ParkingManager("1");
-        String pm = "{\"pkey\":1}";
+        String pm = "{\"pkey\":3}";
 
+        // Post the parking manager to the local database
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
                 .andDo(print());
 
         // Create an user
+        String user1FirstName = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"3\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1FirstName))
+                .andDo(print())
+                .andExpect(status().isOk());
 
         // The correct result
+        String resultFirstName = "{\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Tianhan\"," +
+                "\"last_Name\":\"Jiang\"," +
+                "\"userID\":\"260795887\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
 
         // Get user
+        ResultActions getByFirstNameResult = mockMvc.perform(get("/user/firstname/Tianhan")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
 
         // Check if response match
+        MvcResult resultBody = getByFirstNameResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultFirstName));
     }
 
     @Test
     public void getUserByLastNameTest() throws Exception {
 
+        // Parking manager
+        String pm = "{\"pkey\":4}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        // Create an user
+        String user1LastName  = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"4\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1LastName))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // The correct result
+        String resultLastName = "{\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Tianhan\"," +
+                "\"last_Name\":\"Jiang\"," +
+                "\"userID\":\"260795887\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+
+        // Get user
+        ResultActions getByLastNameResult = mockMvc.perform(get("/user/lastname/Jiang")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // Check if response match
+        MvcResult resultBody = getByLastNameResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultLastName));
     }
 
     @Test
     public void getUserByIDTest() throws Exception {
+        // Parking manager
+        String pm = "{\"pkey\":5}";
 
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        // Create an user
+        String user1ID  = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"5\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1ID))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // The correct result
+        String resultID = "{\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Tianhan\"," +
+                "\"last_Name\":\"Jiang\"," +
+                "\"userID\":\"260795887\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+
+        // Get user
+        ResultActions getByIDResult = mockMvc.perform(get("/user/id/260795887")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // Check if response match
+        MvcResult resultBody = getByIDResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
     }
 
     @Test
