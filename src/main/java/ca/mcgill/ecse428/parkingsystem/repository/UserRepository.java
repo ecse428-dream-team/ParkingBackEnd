@@ -1,5 +1,7 @@
 package ca.mcgill.ecse428.parkingsystem.repository;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,6 +10,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
+import ca.mcgill.ecse428.parkingsystem.model.Reservation;
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 
 
@@ -66,5 +72,50 @@ public class UserRepository {
         if (users != null) return users;
         return null;
 	}
+
+	@Transactional
+	public boolean deleteUser(String username) {
+		User usr = entityManager.find(User.class, username);
+		if (usr == null) 
+			return false;
+		ParkingManager pm = usr.getParkingManager();
+		
+		if(usr.hasParkingSpots()) {
+			List<ParkingSpot> spots = usr.getParkingSpots();
+			for(int i = 0; i < spots.size(); i++) {
+				ParkingSpot spot = spots.get(i);
+				if(spot.hasReservations()) {
+					List<Reservation> rsv = usr.getReservations();
+					for(int j = 0; j < rsv.size(); j++) {
+						Reservation r = rsv.get(j);
+						pm.removeReservation(r);
+					}
+				}
+				if(spot.hasReviews()) {
+					List<Review> rvws = spot.getReviews();
+					for(int j = 0; j < rvws.size(); j++) {
+						Review rvw = rvws.get(j);
+						pm.removeReview(rvw);
+					}
+				}
+				pm.removeParkingSpot(spot);
+			}
+		}
+		
+		if(usr.hasReservations()) {
+			List<Reservation> rsv = usr.getReservations();
+			for(int i = 0; i < rsv.size(); i++) {
+				Reservation r = rsv.get(i);
+				pm.removeReservation(r);
+			}
+		}
+		
+		pm.removeUser(usr);
+		
+		entityManager.refresh(pm);
+		entityManager.remove(usr);
+		return true;
+	}
+	
 
 }

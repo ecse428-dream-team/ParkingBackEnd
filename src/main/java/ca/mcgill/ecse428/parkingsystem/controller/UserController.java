@@ -40,12 +40,6 @@ public class UserController {
 
 	}
 
-	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> users = repository.getAllUsers();
-		return new ResponseEntity<List<User>>(users, null, HttpStatus.OK);
-	}
-
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<User> authenticateUser(
             @RequestHeader("Authorization") String authorization
@@ -105,5 +99,22 @@ public class UserController {
             @PathVariable("id") String id) {
         return repository.getUserById(id);
     }
+    
+	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> users = repository.getAllUsers();
+		return new ResponseEntity<List<User>>(users, null, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/id/{id}")
+	public ResponseEntity<String> deleteUser(@PathVariable("id") String username) {
+		boolean isDeleted = repository.deleteUser(username);
+		if(isDeleted)
+			return new ResponseEntity<String>("User succesfully deleted", HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("User could not be found", HttpStatus.BAD_REQUEST);
+	}
+		
+	
 
 }
