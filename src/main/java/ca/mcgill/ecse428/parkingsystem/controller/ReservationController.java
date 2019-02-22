@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
 import ca.mcgill.ecse428.parkingsystem.model.Reservation;
 import ca.mcgill.ecse428.parkingsystem.repository.ReservationRepository;
 
@@ -41,5 +43,20 @@ public class ReservationController {
 	public Reservation addReservation(@RequestBody Reservation rsv) {
 		return repository.addReservation(rsv);
 	}
+	
+	// Method(s) below is for deletion of a reservation object from database.
+	
+	// this method only deletes the reservation
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<Void> deleteReservation(@PathVariable String id) {
+		Reservation delRes = repository.getReservation(id);
+		repository.deleteRes(delRes);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// End delete method(s)
+	
 
 }
+
+

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
 import ca.mcgill.ecse428.parkingsystem.model.Reservation;
 
 @Repository
@@ -37,4 +38,14 @@ public class ReservationRepository {
 		Reservations = entityManager.createQuery("SELECT a FROM Reservation a").getResultList();
 		return Reservations;
 	}
+	
+	// Delete method(s)
+	
+	@Transactional
+	public void deleteRes(Reservation entity) {
+		entityManager.remove(entity);
+	}
+	
+	// End Delete method(s)
+	
 }
