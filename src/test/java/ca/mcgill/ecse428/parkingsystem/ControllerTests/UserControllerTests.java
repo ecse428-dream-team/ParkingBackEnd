@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.AssertTrue;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -118,8 +119,9 @@ public class UserControllerTests {
         mockRepository.addUser(user1);
         mockRepository.addUser(user2);
 
+
         // The correct result
-        List<User> allUsers = null;
+        List<User> allUsers = new ArrayList<>();
         allUsers.add(user1);
         allUsers.add(user2);
 
