@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
+import ca.mcgill.ecse428.parkingsystem.model.Reservation;
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingSpotRepository;
+import ca.mcgill.ecse428.parkingsystem.repository.ReservationRepository;
+import ca.mcgill.ecse428.parkingsystem.repository.ReviewRepository;
 
 @RestController
 @RequestMapping("/spot")
