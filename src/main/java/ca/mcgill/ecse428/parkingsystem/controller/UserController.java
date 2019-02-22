@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 import ca.mcgill.ecse428.parkingsystem.repository.UserRepository;
 
@@ -39,6 +40,8 @@ public class UserController {
 		return new ResponseEntity("User Created", HttpStatus.OK);
 
 	}
+	
+	
 
 	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<User>> getAllUsers() {
@@ -105,5 +108,17 @@ public class UserController {
             @PathVariable("id") String id) {
         return repository.getUserById(id);
     }
+    
+	// Method(s) below is for deletion of a user object from database.
+	
+	// this method only deletes the user
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+		User delUser = repository.getUserById(id);
+		repository.deleteUser(delUser);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// End delete method(s)
 
 }

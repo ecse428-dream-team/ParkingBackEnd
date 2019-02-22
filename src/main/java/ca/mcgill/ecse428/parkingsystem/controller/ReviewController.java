@@ -45,9 +45,9 @@ public class ReviewController {
 		return repository.addReview(rvw);
 	}
 
-	// Method(s) below is for deletion of a reservation object from database.
+	// Method(s) below is for deletion of a review object from database.
 	
-	// this method only deletes the reservation
+	// this method only deletes the review
 	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<Void> deleteReview(@PathVariable String id) {
 		Review delRev = repository.getReview(id);

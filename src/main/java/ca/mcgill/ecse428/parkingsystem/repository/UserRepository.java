@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 
 
@@ -66,5 +67,14 @@ public class UserRepository {
         if (users != null) return users;
         return null;
 	}
+	
+	// Delete method(s)
+	
+	@Transactional
+	public void deleteUser(User entity) {
+		entityManager.remove(entity);
+	}
+	
+	// End Delete method(s)
 
 }
