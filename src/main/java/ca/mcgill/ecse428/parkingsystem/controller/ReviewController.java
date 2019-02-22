@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,4 +45,17 @@ public class ReviewController {
 		return repository.addReview(rvw);
 	}
 
+	// Method(s) below is for deletion of a reservation object from database.
+	
+	// this method only deletes the reservation
+	@DeleteMapping(path = "/delete/{id}")
+	public ResponseEntity<Void> deleteReview(@PathVariable String id) {
+		Review delRev = repository.getReview(id);
+		repository.deleteRev(delRev);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// End delete method(s)
+	
+	
 }

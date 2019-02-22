@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.Reservation;
 import ca.mcgill.ecse428.parkingsystem.model.Review;
 
 @Repository
@@ -37,5 +38,14 @@ public class ReviewRepository {
 		Reviews = entityManager.createQuery("SELECT a FROM Review a").getResultList();
 		return Reviews;
 	}
+	
+	// Delete method(s)
+	
+	@Transactional
+	public void deleteRev(Review entity) {
+		entityManager.remove(entity);
+	}
+	
+	// End Delete method(s)
 	
 }
