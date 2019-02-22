@@ -1,5 +1,6 @@
 package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,12 +36,6 @@ public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    UserRepository mockRepository;
-
-    @Autowired
-    EntityManager mockEntityManager;
 
     @Test
     public void shouldReturnHello() throws Exception {
@@ -96,6 +91,79 @@ public class UserControllerTests {
     public void getAllUsersTest() throws Exception {
 
         // Parking manager
+        String pm = "{\"pkey\":2}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        // Create 2 users and post them to the local database
+        String user1GetAll = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"2\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1GetAll))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String user2GetAll = "{\"firstName\":\"Dave\"," +
+                "\"lastName\":\"Khan\"," +
+                "\"id\":\"260617915\"," +
+                "\"password\":\"password\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"2\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user2GetAll))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // The correct result
+        String resultGetAllString = "{\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Tianhan\"," +
+                "\"last_Name\":\"Jiang\"," +
+                "\"userID\":\"260795887\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}," +
+                "{\"password\":\"password\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Dave\"," +
+                "\"last_Name\":\"Khan\"," +
+                "\"userID\":\"260617915\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+
+        // Get all users
+        ResultActions getAllResult = mockMvc.perform(get("/user/all")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // Check if responses match
+        MvcResult resultBody = getAllResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultGetAllString));
+    }
+
+    @Test
+    public void getUserByFirstNameTest() throws Exception {
+
+        // Parking manager
         ParkingManager mockParkingManager = new ParkingManager("1");
         String pm = "{\"pkey\":1}";
 
@@ -104,39 +172,13 @@ public class UserControllerTests {
                 .content(pm))
                 .andDo(print());
 
-        // Create 2 users
-        User user1 = new User("Tianhan", "Jiang",
-                "260795887", "password",
-                "email1@gmail.com", true,
-                false, mockParkingManager);
-
-        User user2 = new User("Dave", "Jiang",
-                "260795888", "wordpass",
-                "email2@gmail.com", false,
-                true, mockParkingManager);
-
-        // Add them to the local database
-        mockRepository.addUser(user1);
-        mockRepository.addUser(user2);
-
+        // Create an user
 
         // The correct result
-        List<User> allUsers = new ArrayList<>();
-        allUsers.add(user1);
-        allUsers.add(user2);
 
-        // Get all users
-        ResultActions getAllResult = mockMvc.perform(get("/user/all")
-                .contentType(MediaType.APPLICATION_JSON));
+        // Get user
 
-        // Check if responses match
-        MvcResult resultBody = getAllResult.andReturn();
-        assertTrue(resultBody.getResponse().getContentAsString().equals(allUsers.toString()));
-    }
-
-    @Test
-    public void getUserByFirstNameTest() throws Exception {
-
+        // Check if response match
     }
 
     @Test
