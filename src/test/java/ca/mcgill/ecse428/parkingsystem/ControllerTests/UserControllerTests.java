@@ -305,6 +305,62 @@ public class UserControllerTests {
         MvcResult resultBody = getByIDResult.andReturn();
         assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
     }
+    
+        @Test
+    public void deleteUserById() throws Exception 
+    {
+        // Parking manager
+        String pm = "{\"pkey\":6}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        String user2ID  = "{\"firstName\":\"John\"," +
+                "\"lastName\":\"Doe\"," +
+                "\"id\":\"123456789\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"6\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user2ID))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // The correct result
+        String resultID = "{\"password\":\"pass\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"John\"," +
+                "\"last_Name\":\"Doe\"," +
+                "\"userID\":\"123456789\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+
+        // Get user
+        ResultActions getByIDResult = mockMvc.perform(get("/user/id/123456789")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // Check if we get the right user
+        MvcResult resultBody = getByIDResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
+
+
+        // Delete the user
+        mockMvc.perform(MockMvcRequestBuilders
+            .delete("/user/id/123456789")
+            .contentType(MediaType.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
 
     @Test
     public void userLoginTest() throws Exception {
