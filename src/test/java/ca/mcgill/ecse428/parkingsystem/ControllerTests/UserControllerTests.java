@@ -48,7 +48,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void addUserTest() throws Exception {
+    public void addRenterTest() throws Exception {
 
         String pm = "{\"pkey\":1}";
 
@@ -74,14 +74,40 @@ public class UserControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        String resultString = "{\"password\":\"something\"," +
+        String resultString = "User Created";
+
+        MvcResult resultBody = result.andReturn();
+        assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
+    }
+    
+    @Test
+    public void addSellerTest() throws Exception {
+
+        String pm = "{\"pkey\":1}";
+
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+
+        String user = "{\"firstName\":\"Owais\"," +
+                "\"lastName\":\"Khan\"," +
+                "\"id\":\"260617913\"," +
+                "\"password\":\"something\"," +
                 "\"email\":\"123@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Owais\"," +
-                "\"last_Name\":\"Khan\"," +
-                "\"userID\":\"260617913\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
+                "\"isRenter\":\"false\"," +
+                "\"isSeller\":\"true\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"1\"}}";
+
+        ResultActions result = mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String resultString = "User Created";
 
         MvcResult resultBody = result.andReturn();
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
