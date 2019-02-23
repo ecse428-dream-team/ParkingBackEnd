@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -32,7 +34,7 @@ public class ParkingSpot {
 	// ------------------------
 
 	// ParkingSpot Attributes
-	private String pKey;
+	private int pKey;
 	private int street_Number;
 	private String steet_Name;
 	private String postal_Code;
@@ -67,11 +69,10 @@ public class ParkingSpot {
 	// ------------------------
 
 	@JsonCreator
-	public ParkingSpot(@JsonProperty("pkey") String aPKey, @JsonProperty("addressNumber") int aStreet_Number,
+	public ParkingSpot(@JsonProperty("addressNumber") int aStreet_Number,
 			@JsonProperty("streetName") String aSteet_Name, @JsonProperty("postalCode") String aPostal_Code,
 			@JsonProperty("avgRating") float aAvg_Rating, @JsonProperty("currentPrice") float aCurrent_Price,
 			@JsonProperty("user") User aUser,@JsonProperty("parkingManager") ParkingManager aParkingManager) {
-		pKey = aPKey;
 		street_Number = aStreet_Number;
 		steet_Name = aSteet_Name;
 		postal_Code = aPostal_Code;
@@ -97,7 +98,7 @@ public class ParkingSpot {
 	// INTERFACE
 	// ------------------------
 
-	public boolean setPKey(String aPKey) {
+	public boolean setPKey(int aPKey) {
 		boolean wasSet = false;
 		pKey = aPKey;
 		wasSet = true;
@@ -140,7 +141,8 @@ public class ParkingSpot {
 	}
 
 	@Id
-	public String getPKey() {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	public int getPKey() {
 		return pKey;
 	}
 
@@ -257,7 +259,7 @@ public class ParkingSpot {
 	/* Code from template association_AddManyToOne */
 	public Reservation addReservation(String aPKey, String aVehicle_Plate, Date aStart_Date, Date aEnd_Date,
 			float aPrice_Paid, int aStart_Time, int aEnd_Time, User aUser, ParkingManager aParkingManager) {
-		return new Reservation(aPKey, aVehicle_Plate, aStart_Date, aEnd_Date, aPrice_Paid, aStart_Time, aEnd_Time,
+		return new Reservation(aVehicle_Plate, aStart_Date, aEnd_Date, aPrice_Paid, aStart_Time, aEnd_Time,
 				aUser, aParkingManager, this);
 	}
 
@@ -329,7 +331,7 @@ public class ParkingSpot {
 
 	/* Code from template association_AddManyToOne */
 	public Review addReview(String aPKey, float aRating, String aComment, ParkingManager aParkingManager) {
-		return new Review(aPKey, aRating, aComment, aParkingManager, this);
+		return new Review(aRating, aComment, aParkingManager, this);
 	}
 
 	public boolean addReview(Review aReview) {

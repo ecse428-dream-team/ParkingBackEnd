@@ -7,6 +7,8 @@ import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -28,7 +30,7 @@ public class Reservation {
 	// ------------------------
 
 	// Reservation Attributes
-	private String pKey;
+	private int pKey;
 	private String vehicle_Plate;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date start_Date;
@@ -50,14 +52,13 @@ public class Reservation {
 	// ------------------------
 
 	@JsonCreator
-	public Reservation(@JsonProperty("pkey") String aPKey, @JsonProperty("plate") String aVehicle_Plate,
+	public Reservation(@JsonProperty("plate") String aVehicle_Plate,
 			@JsonProperty("startDate") @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date aStart_Date,
 			@JsonProperty("endDate") @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date aEnd_Date,
 			@JsonProperty("pricePaid") float aPrice_Paid, @JsonProperty("startTime") int aStart_Time,
 			@JsonProperty("endTime") int aEnd_Time, @JsonProperty("user") User aUser,
 			@JsonProperty("parkingManager") ParkingManager aParkingManager,
 			@JsonProperty("spot") ParkingSpot aParkingSpot) {
-		pKey = aPKey;
 		vehicle_Plate = aVehicle_Plate;
 		start_Date = aStart_Date;
 		end_Date = aEnd_Date;
@@ -83,7 +84,7 @@ public class Reservation {
 	// INTERFACE
 	// ------------------------
 
-	public boolean setPKey(String aPKey) {
+	public boolean setPKey(int aPKey) {
 		boolean wasSet = false;
 		pKey = aPKey;
 		wasSet = true;
@@ -133,7 +134,8 @@ public class Reservation {
 	}
 
 	@Id
-	public String getPKey() {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	public int getPKey() {
 		return pKey;
 	}
 
