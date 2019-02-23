@@ -313,11 +313,11 @@ public class UserControllerTests {
         assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
     }
     
-        @Test
+    @Test
     public void deleteUserById() throws Exception 
     {
         // Parking manager
-        String pm = "{\"pkey\":6}";
+        String pm = "{\"pkey\":7}";
 
         // Post the parking manager to the local database
         mockMvc.perform(post("/manager")
@@ -333,7 +333,7 @@ public class UserControllerTests {
                 "\"isRenter\":\"true\"," +
                 "\"isSeller\":\"false\"," +
                 "\"parkingManager\":" +
-                " {\"pkey\":\"6\"}}";
+                " {\"pkey\":\"7\"}}";
 
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
