@@ -53,8 +53,20 @@ public class UserRepository {
 
     @Transactional
     public User getUserById(String id) {
-        List users = entityManager.createQuery("SELECT u FROM User u WHERE u.userID LIKE :custId", User.class)
+        List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.userID LIKE :custId", User.class)
                 .setParameter("custId", id)
+                .setMaxResults(1)
+                .getResultList();
+
+        if (users != null) return (User)users.get(0);
+        return null;
+
+    }
+    
+    @Transactional
+    public User getUserByEmail(String email) {
+        List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.email LIKE :custEmail", User.class)
+                .setParameter("custEmail", email)
                 .setMaxResults(1)
                 .getResultList();
 
