@@ -41,7 +41,17 @@ public class UserController {
 
 	}
 	
+	// Put method, for editing a user. This assumes that we never change the Id
 	
+	@PutMapping(path = "/edit", consumes = "application/json", produces = "application/json")
+	public ResponseEntity editUser(@RequestBody User user) {
+		User oldUser = repository.getUserById(user.getUserID()); //contains all old info
+		User newUser = user; //contains all the new info
+		repository.editUser(oldUser, newUser);
+		return new ResponseEntity("User information has been updated!", HttpStatus.OK);
+	}
+	
+	// End put method
 
 	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<User>> getAllUsers() {

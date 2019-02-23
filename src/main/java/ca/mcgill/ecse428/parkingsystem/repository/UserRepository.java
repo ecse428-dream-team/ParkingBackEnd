@@ -24,6 +24,19 @@ public class UserRepository {
 		return user;
 	}
 
+	// Edit user method
+	
+	@Transactional
+	public User editUser(User oldUser, User newUser) {
+		oldUser.setEmail(newUser.getEmail());
+		oldUser.setfirst_name(newUser.getfirst_name());
+		oldUser.setLast_Name(newUser.getLast_Name());
+		oldUser.setPassword(newUser.getPassword());
+		return oldUser;
+	}
+	
+	// End edit user method
+	
 	@Transactional
     public List<User> getUserByFirstName(String firstName) {
 	    List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.first_name LIKE :custName", User.class)
