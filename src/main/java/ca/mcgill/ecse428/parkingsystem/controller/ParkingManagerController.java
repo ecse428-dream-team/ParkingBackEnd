@@ -18,7 +18,7 @@ public class ParkingManagerController {
 	@Autowired
 	ParkingManagerRepository repository;
 
-	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(path = "/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ParkingManager> getParkingManager(@PathVariable String id) {
 
 		ParkingManager ParkingManagerFound = repository.getParkingManager(id);

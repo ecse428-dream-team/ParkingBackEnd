@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.http.ResponseEntity;
 
 import javax.persistence.EntityManager;
@@ -76,6 +77,7 @@ public class UserControllerTests {
 
         String resultString = "User Created";
 
+
         MvcResult resultBody = result.andReturn();
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
     }
@@ -108,6 +110,18 @@ public class UserControllerTests {
                 .andExpect(status().isOk());
 
         String resultString = "User Created";
+
+        /*
+        String resultString = "{\"password\":\"something\"," +
+                "\"email\":\"123@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"Owais\"," +
+                "\"last_Name\":\"Khan\"," +
+                "\"userID\":\"260617913\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+        */
+
 
         MvcResult resultBody = result.andReturn();
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
@@ -209,6 +223,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"3\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1FirstName))
@@ -258,6 +273,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"4\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1LastName))
@@ -306,6 +322,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"5\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1ID))
@@ -331,9 +348,94 @@ public class UserControllerTests {
         MvcResult resultBody = getByIDResult.andReturn();
         assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
     }
+    
+    @Test
+    public void deleteUserById() throws Exception 
+    {
+        // Parking manager
+        String pm = "{\"pkey\":7}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        String user2ID  = "{\"firstName\":\"John\"," +
+                "\"lastName\":\"Doe\"," +
+                "\"id\":\"123456789\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"7\"}}";
+
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user2ID))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // The correct result
+        String resultID = "{\"password\":\"pass\"," +
+                "\"email\":\"2@gmail.com\"," +
+                "\"isRenter\":true," +
+                "\"isSeller\":false," +
+                "\"first_name\":\"John\"," +
+                "\"last_Name\":\"Doe\"," +
+                "\"userID\":\"123456789\"," +
+                "\"parkingSpots\":[],\"reservations\":[]}";
+
+        // Get user
+        ResultActions getByIDResult = mockMvc.perform(get("/user/id/123456789")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+        // Check if we get the right user
+        MvcResult resultBody = getByIDResult.andReturn();
+        assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
+
+
+        // Delete the user
+        mockMvc.perform(MockMvcRequestBuilders
+            .delete("/user/id/123456789")
+            .contentType(MediaType.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
 
     @Test
-    public void userLoginTest() throws Exception {
+    public void authenticateGoodInputsTest() throws Exception {
+
+        // Parking manager
+        String pm = "{\"pkey\":6}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        // Create an user
+        String user1Authenticate  = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"5\"}}";
+
+        // Post to the local database
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1Authenticate))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // Authenticate user
 
     }
 }
