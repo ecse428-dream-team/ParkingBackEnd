@@ -46,6 +46,17 @@ public class UserRepository {
     }
 
     @Transactional
+    public User getUserByEmail(String email) {
+        List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.email LIKE :email", User.class)
+                .setParameter("email", email)
+                .setMaxResults(1)
+                .getResultList();
+
+        if (users != null) return users.get(0);
+        return null;
+    }
+
+    @Transactional
     public User getUserById(String id) {
         List users = entityManager.createQuery("SELECT u FROM User u WHERE u.userID LIKE :custId", User.class)
                 .setParameter("custId", id)

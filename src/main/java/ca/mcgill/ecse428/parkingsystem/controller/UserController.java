@@ -27,10 +27,8 @@ public class UserController {
 	    List<User> users = repository.getAllUsers();
 
 	    for(User currUser: users) {
-	        if(currUser.getUserID().equals(user.getUserID())) {
-	            return new ResponseEntity("User with that id already exists", HttpStatus.BAD_REQUEST);
-            } else if(currUser.getEmail().equals(user.getEmail())) {
-                return new ResponseEntity("User with that email already exists", HttpStatus.BAD_REQUEST);
+	        if(currUser.getEmail().equals(user.getEmail())) {
+	            return new ResponseEntity("User with that email already exists", HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -71,10 +69,10 @@ public class UserController {
         }
     }
 
-    private User authenticate(String username, String password) {
-	    if(username != null && password != null) {
+    private User authenticate(String email, String password) {
+	    if(email != null && password != null) {
 	        try {
-                User user = repository.getUserById(username);
+                User user = repository.getUserByEmail(email);
                 if(user.getPassword().equals(password)) {
                     return user;
                 } else {
