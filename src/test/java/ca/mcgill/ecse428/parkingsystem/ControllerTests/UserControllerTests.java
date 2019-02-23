@@ -395,13 +395,10 @@ public class UserControllerTests {
         // Check if we get the right user
         MvcResult resultBody = getByIDResult.andReturn();
         assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
-
-
+        
         // Delete the user
-        mockMvc.perform(MockMvcRequestBuilders
-            .delete("/user/id/123456789")
+        mockMvc.perform(delete("/user/id/123456789")
             .contentType(MediaType.APPLICATION_JSON))
-            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 
