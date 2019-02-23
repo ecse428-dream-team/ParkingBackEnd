@@ -74,6 +74,9 @@ public class UserControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+        String resultString = "User Created";
+
+        /*
         String resultString = "{\"password\":\"something\"," +
                 "\"email\":\"123@gmail.com\"," +
                 "\"isRenter\":true," +
@@ -82,6 +85,7 @@ public class UserControllerTests {
                 "\"last_Name\":\"Khan\"," +
                 "\"userID\":\"260617913\"," +
                 "\"parkingSpots\":[],\"reservations\":[]}";
+        */
 
         MvcResult resultBody = result.andReturn();
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
@@ -183,6 +187,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"3\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1FirstName))
@@ -232,6 +237,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"4\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1LastName))
@@ -280,6 +286,7 @@ public class UserControllerTests {
                 "\"parkingManager\":" +
                 " {\"pkey\":\"5\"}}";
 
+        // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(user1ID))
@@ -307,7 +314,36 @@ public class UserControllerTests {
     }
 
     @Test
-    public void userLoginTest() throws Exception {
+    public void authenticateGoodInputsTest() throws Exception {
+
+        // Parking manager
+        String pm = "{\"pkey\":6}";
+
+        // Post the parking manager to the local database
+        mockMvc.perform(post("/manager")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pm))
+                .andDo(print());
+
+        // Create an user
+        String user1Authenticate  = "{\"firstName\":\"Tianhan\"," +
+                "\"lastName\":\"Jiang\"," +
+                "\"id\":\"260795887\"," +
+                "\"password\":\"pass\"," +
+                "\"email\":\"1@gmail.com\"," +
+                "\"isRenter\":\"true\"," +
+                "\"isSeller\":\"false\"," +
+                "\"parkingManager\":" +
+                " {\"pkey\":\"5\"}}";
+
+        // Post to the local database
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1Authenticate))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // Authenticate user
 
     }
 }
