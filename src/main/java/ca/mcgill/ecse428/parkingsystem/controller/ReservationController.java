@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,11 +51,15 @@ public class ReservationController {
 		} else {
 			return new ResponseEntity<String>("Reservation could not be found.", HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
-	@DeleteMapping
-	public Boolean cancelReservation(@PathVariable String pKey) {
-		return repository.cancelReservation(pKey);
+	@PutMapping(path = "/cancel/{pKey}")
+	public ResponseEntity<String> cancelReservation(@PathVariable String pKey) {
+		boolean isCanceled = repository.cancelReservation(pKey);
+		if(isCanceled) {
+			return new ResponseEntity<String>("Reservation successfully canceled.", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("Reservation could not be found or has already been canceled.", HttpStatus.BAD_REQUEST);
+		}
 	}
 }

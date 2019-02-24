@@ -73,17 +73,13 @@ public class ReservationRepository {
 	public Boolean cancelReservation(String pKey) {
 		Boolean isCanceled = false;
 		Reservation aReservation = entityManager.find(Reservation.class, pKey);
-		if (aReservation != null) {
+		if (aReservation != null && aReservation.getVehicle_Plate() != null) {
 			aReservation.setEnd_Date(null);
 			aReservation.setStart_Date(null);
 			aReservation.setEnd_Time(0);
 			aReservation.setStart_Time(0);
 			aReservation.setPrice_Paid(0);
 			aReservation.setVehicle_Plate(null);
-			// deleting object associations and itself from whole system
-			// not sure if this function is needed to realize the logic of canceling a reservation
-			// could someone verify this? 
-			aReservation.delete(); 
 			entityManager.persist(aReservation);
 			isCanceled = true;
 			return isCanceled;
