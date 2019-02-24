@@ -9,8 +9,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ca.mcgill.ecse428.parkingsystem.model.Admin;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
+import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
 import ca.mcgill.ecse428.parkingsystem.model.Reservation;
+import ca.mcgill.ecse428.parkingsystem.model.User;
 
 @Repository
 public class ReservationRepository {
@@ -44,15 +46,26 @@ public class ReservationRepository {
 	//	3) Vertify the system so the reservation spot should be available
 	
 	@Transactional
-	public Boolean deleteReservationFromTable(String pKey) {
+	public Boolean deleteReservation(String pKey) {
 		Boolean isDeleted = false; 
 		Reservation retrievedReservation = entityManager.find(Reservation.class, pKey);
-		if (retrievedReservation != null) {
-			entityManager.remove(retrievedReservation);
-			isDeleted = true;
+		if (retrievedReservation == null) {
+			System.out.println("\n" + "The specific reservation could not be found. Can not delete null reservation!" + "\n");
 			return isDeleted;
 		}
-		System.out.println("\n" + "The specific reservation could not be found. Can not delete null reservation!" + "\n");
+		
+		ParkingManager pm = retrievedReservation.getParkingManager();
+		ParkingSpot ps = retrievedReservation.getParkingSpot();
+		User usr = retrievedReservation.getUser();
+		
+		pm.removeReservation(retrievedReservation);
+		ps.removeReservation(retrievedReservation);
+		usr.removeReservation(retrievedReservation);
+		
+		entityManager.persist(pm);
+		entityManager.remove(retrievedReservation);
+		
+		isDeleted = true;
 		return isDeleted;
 	}
 	
