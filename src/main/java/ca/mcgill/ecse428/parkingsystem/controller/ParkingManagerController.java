@@ -31,9 +31,4 @@ public class ParkingManagerController {
 		return new ResponseEntity<>(ParkingManagers, null, HttpStatus.OK);
 	}
 
-	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ParkingManager createUser(@RequestBody ParkingManager manager) {
-		return repository.addManager(manager);
-	}
-
 }
