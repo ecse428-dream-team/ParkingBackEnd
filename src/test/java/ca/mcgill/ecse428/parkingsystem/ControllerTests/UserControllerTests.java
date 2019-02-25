@@ -1,16 +1,15 @@
 package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
-import ca.mcgill.ecse428.parkingsystem.model.User;
-import ca.mcgill.ecse428.parkingsystem.repository.UserRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.http.ResponseEntity;
 
-import javax.persistence.EntityManager;
-import javax.validation.constraints.AssertTrue;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Base64;
 
 
 @RunWith(SpringRunner.class)
@@ -38,40 +32,84 @@ public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void shouldReturnHello() throws Exception {
-        ResultActions result = mockMvc.perform(get("/user/hello"))
-                .andDo(print())
-                .andExpect(status().isOk());
+    String user1 = "{\"firstName\":\"Firstname1\"," +
+            "\"lastName\":\"Lastname1\"," +
+            "\"id\":\"id1\"," +
+            "\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"isRenter\":\"true\"," +
+            "\"isSeller\":\"false\"," +
+            "\"parkingManager\":" +
+            " {\"pkey\":\"1\"}}";
 
-        MvcResult resultBody = result.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals("Hello"));
-    }
+    String user2 = "{\"firstName\":\"Firstname2\"," +
+            "\"lastName\":\"Lastname2\"," +
+            "\"id\":\"id2\"," +
+            "\"password\":\"psasword2\"," +
+            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
+            "\"isRenter\":\"false\"," +
+            "\"isSeller\":\"true\"," +
+            "\"parkingManager\":" +
+            " {\"pkey\":\"1\"}}";
 
-    @Test
-    public void addRenterTest() throws Exception {
+    String user1Expected = "{\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"isRenter\":true," +
+            "\"isSeller\":false," +
+            "\"first_name\":\"Firstname1\"," +
+            "\"last_Name\":\"Lastname1\"," +
+            "\"userID\":\"user1\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}";
 
+    String user2Expected = "{\"password\":\"password2\"," +
+            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
+            "\"isRenter\":false," +
+            "\"isSeller\":true," +
+            "\"first_name\":\"Firstname2\"," +
+            "\"last_Name\":\"Lastname2\"," +
+            "\"userID\":\"user2\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}";
+
+    String getAllUsersExpected = "{\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"isRenter\":true," +
+            "\"isSeller\":false," +
+            "\"first_name\":\"Firstname1\"," +
+            "\"last_Name\":\"Lastname1\"," +
+            "\"userID\":\"id1\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}," +
+            "{\"password\":\"password2\"," +
+            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
+            "\"isRenter\":false," +
+            "\"isSeller\":true," +
+            "\"first_name\":\"Firstname2\"," +
+            "\"last_Name\":\"Lastname2\"," +
+            "\"userID\":\"user2\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}";
+
+    @Before
+    public void setup() throws Exception {
         String pm = "{\"pkey\":1}";
 
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
                 .andDo(print());
+    }
 
+    @After
+    public void tearDown() throws Exception {
+        mockMvc.perform(delete("/manager/pkey/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
 
-        String user = "{\"firstName\":\"Owais\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617913\"," +
-                "\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
+    @Test
+    public void addRenterTest() throws Exception {
 
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -85,43 +123,13 @@ public class UserControllerTests {
     @Test
     public void addSellerTest() throws Exception {
 
-        String pm = "{\"pkey\":1}";
-
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-
-        String user = "{\"firstName\":\"Owais\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617913\"," +
-                "\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"isRenter\":\"false\"," +
-                "\"isSeller\":\"true\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user))
+                .content(user2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         String resultString = "User Created";
-
-        /*
-        String resultString = "{\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Owais\"," +
-                "\"last_Name\":\"Khan\"," +
-                "\"userID\":\"260617913\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
-        */
-
 
         MvcResult resultBody = result.andReturn();
         assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
@@ -130,65 +138,17 @@ public class UserControllerTests {
     @Test
     public void getAllUsersTest() throws Exception {
 
-        // Parking manager
-        String pm = "{\"pkey\":2}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        // Create 2 users and post them to the local database
-        String user1GetAll = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"2\"}}";
-
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user1GetAll))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        String user2GetAll = "{\"firstName\":\"Dave\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617915\"," +
-                "\"password\":\"password\"," +
-                "\"email\":\"2@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"2\"}}";
-
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user2GetAll))
+                .content(user2))
                 .andDo(print())
                 .andExpect(status().isOk());
-
-        // The correct result
-        String resultGetAllString = "{\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Tianhan\"," +
-                "\"last_Name\":\"Jiang\"," +
-                "\"userID\":\"260795887\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}," +
-                "{\"password\":\"password\"," +
-                "\"email\":\"2@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Dave\"," +
-                "\"last_Name\":\"Khan\"," +
-                "\"userID\":\"260617915\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
 
         // Get all users
         ResultActions getAllResult = mockMvc.perform(get("/user/all")
@@ -197,242 +157,149 @@ public class UserControllerTests {
 
         // Check if responses match
         MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultGetAllString));
+        assertThat(resultBody.getResponse().getContentAsString().equals(getAllUsersExpected));
     }
 
     @Test
     public void getUserByFirstNameTest() throws Exception {
 
-        // Parking manager
-        String pm = "{\"pkey\":3}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        // Create an user
-        String user1FirstName = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"3\"}}";
-
         // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user1FirstName))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // The correct result
-        String resultFirstName = "{\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Tianhan\"," +
-                "\"last_Name\":\"Jiang\"," +
-                "\"userID\":\"260795887\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
-
         // Get user
-        ResultActions getByFirstNameResult = mockMvc.perform(get("/user/firstname/Tianhan")
+        ResultActions getByFirstNameResult = mockMvc.perform(get("/user/firstname/Firsname1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
         // Check if response match
         MvcResult resultBody = getByFirstNameResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultFirstName));
+        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
     }
 
     @Test
     public void getUserByLastNameTest() throws Exception {
 
-        // Parking manager
-        String pm = "{\"pkey\":4}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        // Create an user
-        String user1LastName  = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"4\"}}";
-
         // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user1LastName))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // The correct result
-        String resultLastName = "{\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Tianhan\"," +
-                "\"last_Name\":\"Jiang\"," +
-                "\"userID\":\"260795887\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
-
         // Get user
-        ResultActions getByLastNameResult = mockMvc.perform(get("/user/lastname/Jiang")
+        ResultActions getByLastNameResult = mockMvc.perform(get("/user/lastname/Lastname1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
         // Check if response match
         MvcResult resultBody = getByLastNameResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultLastName));
+        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
     }
 
     @Test
     public void getUserByIDTest() throws Exception {
-        // Parking manager
-        String pm = "{\"pkey\":5}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        // Create an user
-        String user1ID  = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"5\"}}";
 
         // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user1ID))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // The correct result
-        String resultID = "{\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"Tianhan\"," +
-                "\"last_Name\":\"Jiang\"," +
-                "\"userID\":\"260795887\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
-
         // Get user
-        ResultActions getByIDResult = mockMvc.perform(get("/user/id/260795887")
+        ResultActions getByIDResult = mockMvc.perform(get("/user/id/id1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
         // Check if response match
         MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
+        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
     }
     
     @Test
     public void deleteUserById() throws Exception 
     {
-        // Parking manager
-        String pm = "{\"pkey\":7}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        String user2ID  = "{\"firstName\":\"John\"," +
-                "\"lastName\":\"Doe\"," +
-                "\"id\":\"123456789\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"2@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"7\"}}";
 
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user2ID))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // The correct result
-        String resultID = "{\"password\":\"pass\"," +
-                "\"email\":\"2@gmail.com\"," +
-                "\"isRenter\":true," +
-                "\"isSeller\":false," +
-                "\"first_name\":\"John\"," +
-                "\"last_Name\":\"Doe\"," +
-                "\"userID\":\"123456789\"," +
-                "\"parkingSpots\":[],\"reservations\":[]}";
+        // Delete user
+        mockMvc.perform(delete("/user/id/id1"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
 
-        // Get user
-        ResultActions getByIDResult = mockMvc.perform(get("/user/id/123456789")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
-
-        // Check if we get the right user
-        MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultID));
-        
-        // Delete the user
-        mockMvc.perform(delete("/user/id/123456789")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/user/id/id1"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void authenticateGoodInputsTest() throws Exception {
-
-        // Parking manager
-        String pm = "{\"pkey\":6}";
-
-        // Post the parking manager to the local database
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-
-        // Create an user
-        String user1Authenticate  = "{\"firstName\":\"Tianhan\"," +
-                "\"lastName\":\"Jiang\"," +
-                "\"id\":\"260795887\"," +
-                "\"password\":\"pass\"," +
-                "\"email\":\"1@gmail.com\"," +
-                "\"isRenter\":\"true\"," +
-                "\"isSeller\":\"false\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"5\"}}";
+    public void authenticateWithEmail() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(user1Authenticate))
+                .content(user1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // Authenticate user
+        String authorizationHeaderEmail = "Firstname1.Lastname1@gmail.com:password1";
+        authorizationHeaderEmail = Base64.getEncoder().encodeToString(authorizationHeaderEmail.getBytes("utf-8"));
+        authorizationHeaderEmail = "basic " + authorizationHeaderEmail;
+
+        mockMvc.perform(post("/user/authenticate")
+                .header("Authorization", authorizationHeaderEmail)
+                .header("Method", "email"))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void authenticateWithUsername() throws Exception {
+
+        // Post to the local database
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String authorizationHeaderUsername = "id1:password1";
+        authorizationHeaderUsername = Base64.getEncoder().encodeToString(authorizationHeaderUsername.getBytes("utf-8"));
+        authorizationHeaderUsername = "basic " + authorizationHeaderUsername;
+
+        mockMvc.perform(post("/user/authenticate")
+                .header("Authorization", authorizationHeaderUsername)
+                .header("Method", "username"))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void authenticationFailsOnWrongCredentials() throws Exception {
+
+        // Post to the local database
+        mockMvc.perform(post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(user1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String authorizationHeaderWrong = "someemail:somepassword";
+        authorizationHeaderWrong = Base64.getEncoder().encodeToString(authorizationHeaderWrong.getBytes("utf-8"));
+        authorizationHeaderWrong = "basic " + authorizationHeaderWrong;
+
+        mockMvc.perform(post("/user/authenticate")
+                .header("Authorization", authorizationHeaderWrong)
+                .header("Method", "username"))
+                .andExpect(status().isUnauthorized());
 
     }
 }
