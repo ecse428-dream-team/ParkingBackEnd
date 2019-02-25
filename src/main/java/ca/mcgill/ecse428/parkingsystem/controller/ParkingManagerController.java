@@ -36,4 +36,10 @@ public class ParkingManagerController {
 		return repository.addManager(manager);
 	}
 
+    @DeleteMapping(value = "/pkey/{pkey}",consumes = "application/json", produces = "application/json")
+    public ResponseEntity deleteUser(@PathVariable("pkey") String pkey) {
+        repository.deleteManager(pkey);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

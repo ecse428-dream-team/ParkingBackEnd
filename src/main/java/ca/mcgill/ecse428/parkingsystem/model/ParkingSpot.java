@@ -34,7 +34,7 @@ public class ParkingSpot {
 	// ParkingSpot Attributes
 	private String pKey;
 	private int street_Number;
-	private String steet_Name;
+	private String street_Name;
 	private String postal_Code;
 	private float avg_Rating;
 	private float current_Price;
@@ -68,12 +68,12 @@ public class ParkingSpot {
 
 	@JsonCreator
 	public ParkingSpot(@JsonProperty("pkey") String aPKey, @JsonProperty("addressNumber") int aStreet_Number,
-			@JsonProperty("streetName") String aSteet_Name, @JsonProperty("postalCode") String aPostal_Code,
+			@JsonProperty("streetName") String aStreet_Name, @JsonProperty("postalCode") String aPostal_Code,
 			@JsonProperty("avgRating") float aAvg_Rating, @JsonProperty("currentPrice") float aCurrent_Price,
 			@JsonProperty("user") User aUser,@JsonProperty("parkingManager") ParkingManager aParkingManager) {
 		pKey = aPKey;
 		street_Number = aStreet_Number;
-		steet_Name = aSteet_Name;
+		street_Name = aStreet_Name;
 		postal_Code = aPostal_Code;
 		avg_Rating = aAvg_Rating;
 		current_Price = aCurrent_Price;
@@ -111,9 +111,9 @@ public class ParkingSpot {
 		return wasSet;
 	}
 
-	public boolean setSteet_Name(String aSteet_Name) {
+	public boolean setstreet_Name(String astreet_Name) {
 		boolean wasSet = false;
-		steet_Name = aSteet_Name;
+		street_Name = astreet_Name;
 		wasSet = true;
 		return wasSet;
 	}
@@ -148,8 +148,8 @@ public class ParkingSpot {
 		return street_Number;
 	}
 
-	public String getSteet_Name() {
-		return steet_Name;
+	public String getstreet_Name() {
+		return street_Name;
 	}
 
 	public String getPostal_Code() {
@@ -435,7 +435,7 @@ public class ParkingSpot {
 
 	public String toString() {
 		return super.toString() + "[" + "pKey" + ":" + getPKey() + "," + "street_Number" + ":" + getStreet_Number()
-				+ "," + "steet_Name" + ":" + getSteet_Name() + "," + "postal_Code" + ":" + getPostal_Code() + ","
+				+ "," + "street_Name" + ":" + getstreet_Name() + "," + "postal_Code" + ":" + getPostal_Code() + ","
 				+ "avg_Rating" + ":" + getAvg_Rating() + "," + "current_Price" + ":" + getCurrent_Price() + "]"
 				+ System.getProperties().getProperty("line.separator") + "  " + "user = "
 				+ (getUser() != null ? Integer.toHexString(System.identityHashCode(getUser())) : "null")

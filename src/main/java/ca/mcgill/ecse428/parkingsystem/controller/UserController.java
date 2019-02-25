@@ -120,8 +120,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
-	public User getUserById(@PathVariable("id") String id) {
-		return repository.getUserById(id);
+	public ResponseEntity getUserById(@PathVariable("id") String id) {
+	    User user = repository.getUserById(id);
+	    if(user == null) {
+	        return new ResponseEntity<>("No user with that id found", HttpStatus.BAD_REQUEST);
+        } else {
+	        return new ResponseEntity(user, HttpStatus.OK);
+        }
 	}
 
 	@GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -134,7 +139,7 @@ public class UserController {
 	public ResponseEntity<String> deleteUser(@PathVariable("id") String username) {
 		boolean isDeleted = repository.deleteUser(username);
 		if (isDeleted)
-			return new ResponseEntity<String>("User succesfully deleted", HttpStatus.OK);
+			return new ResponseEntity<String>("User succesfully deleted", HttpStatus.NO_CONTENT);
 		else
 			return new ResponseEntity<String>("User could not be found", HttpStatus.BAD_REQUEST);
 	}
