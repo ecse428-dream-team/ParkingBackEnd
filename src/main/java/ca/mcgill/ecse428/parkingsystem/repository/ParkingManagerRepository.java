@@ -43,4 +43,12 @@ public class ParkingManagerRepository {
 
 		return parkingManagers;
 	}
+
+    @Transactional
+    public void deleteManager(String pkey){
+
+	    ParkingManager pm = entityManager.find(ParkingManager.class, pkey);
+	    entityManager.remove(pm);
+
+    }
 }

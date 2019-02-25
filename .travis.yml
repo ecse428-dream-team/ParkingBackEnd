@@ -1,0 +1,16 @@
+language: java
+
+jdk:
+- oraclejdk8
+
+script:
+- ./gradlew clean build
+
+notifications:
+  email: false
+
+services:
+- postgresql
+
+before_script:
+- psql -c 'create database travis_ci_test;' -U postgres

@@ -56,7 +56,7 @@ public class UserRepository {
                 .setMaxResults(1)
                 .getResultList();
 
-        if (users != null) return (User)users.get(0);
+        if (users != null && users.size()>=1) return (User)users.get(0);
         return null;
 
     }
