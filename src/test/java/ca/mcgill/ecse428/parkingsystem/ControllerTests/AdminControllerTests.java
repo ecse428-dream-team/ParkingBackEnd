@@ -2,13 +2,14 @@ package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,143 +29,107 @@ public class AdminControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void shouldReturnHello() throws Exception {
-        ResultActions result = mockMvc.perform(get("/admin"))
-                .andDo(print())
-                .andExpect(status().isOk());
+    String pm = "{\"pkey\":1}";
 
-        MvcResult resultBody = result.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals("Hello"));
-    }
-    
-    @Test
-    public void addAdminTest() throws Exception {
-    	
-    	String pm = "{\"pkey\":1}";
-    	
-    	mockMvc.perform(post("/manager")
-    			.contentType(MediaType.APPLICATION_JSON)
-    			.content(pm))
-    			.andDo(print());
-    	
-    	String admin = "{\"firstName\":\"Owais\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617913\"," +
-                "\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-    	
-    	ResultActions result = mockMvc.perform(post("/admin")
-    			.contentType(MediaType.APPLICATION_JSON)
-    			.content(admin))
-    			.andDo(print())
-    			.andExpect(status().isOk());
-    	
-    	String resultString = "{\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"first_name\":\"Owais\"," +
-                "\"last_Name\":\"Khan\"," +
-                "\"userID\":\"260617913\"}";
-    	
-    	MvcResult resultBody = result.andReturn();
-    	assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
-    }
-    
-    @Test
-    public void getAllAdminsTest() throws Exception {
-    	
-    	String pm = "{\"pkey\":1}";
+    String admin1 = "{\"firstName\":\"Firstname1\"," +
+            "\"lastName\":\"Lastname1\"," +
+            "\"id\":\"id1\"," +
+            "\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"parkingManager\":" +
+            " {\"pkey\":\"1\"}}";
 
+    String admin2 = "{\"firstName\":\"Firstname2\"," +
+            "\"lastName\":\"Lastname2\"," +
+            "\"id\":\"id2\"," +
+            "\"password\":\"psasword2\"," +
+            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
+            "\"parkingManager\":" +
+            " {\"pkey\":\"1\"}}";
+
+    String admin1Expected = "{\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"first_name\":\"Firstname1\"," +
+            "\"last_Name\":\"Lastname1\"," +
+            "\"userID\":\"id1\"}";
+
+    String getAllAdminsExpected = "{\"password\":\"password1\"," +
+            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
+            "\"first_name\":\"Firstname1\"," +
+            "\"last_Name\":\"Lastname1\"," +
+            "\"userID\":\"id1\"," +
+            "\"password\":\"password2\"," +
+            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
+            "\"first_name\":\"Firstname1\"," +
+            "\"last_Name\":\"Lastname1\"," +
+            "\"userID\":\"id2\"}";
+
+    @Before
+    public void setup() throws Exception {
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
                 .andDo(print());
-        
-        String admin_1 = "{\"firstName\":\"Owais\"," +
-                "\"lastName\":\"Khan\"," +
-                "\"id\":\"260617913\"," +
-                "\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-        
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        mockMvc.perform(delete("/manager/pkey/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
+
+    @Test
+    public void addAdminTest() throws Exception {
+
+    	ResultActions result = mockMvc.perform(post("/admin")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(admin1))
+    			.andDo(print())
+    			.andExpect(status().isOk());
+
+    	MvcResult resultBody = result.andReturn();
+    	assertTrue(resultBody.getResponse().getContentAsString().equals(admin1Expected));
+    }
+    
+    @Test
+    public void getAllAdminsTest() throws Exception {
+
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(admin_1))
+                .content(admin1))
                 .andDo(print())
                 .andExpect(status().isOk());
-        
-        String admin_2 = "{\"firstName\":\"HyunSu\"," +
-                "\"lastName\":\"An\"," +
-                "\"id\":\"260775639\"," +
-                "\"password\":\"hi\"," +
-                "\"email\":\"1234@gmail.com\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-        
+
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(admin_2))
+                .content(admin2))
                 .andDo(print())
                 .andExpect(status().isOk());
-        
-        String result_Admins = "{\"password\":\"something\"," +
-                "\"email\":\"123@gmail.com\"," +
-                "\"first_name\":\"Owais\"," +
-                "\"last_Name\":\"Khan\"," +
-                "\"userID\":\"260617913\"," +
-                "\"password\":\"hi\"," +
-                "\"email\":\"1234@gmail.com\"," +
-                "\"first_name\":\"HyunSu\"," +
-                "\"last_Name\":\"An\"," +
-                "\"userID\":\"260775639\"}";
-        
+
         ResultActions getAllResult = mockMvc.perform(get("/admin/all")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
         
         MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(result_Admins));
+        assertThat(resultBody.getResponse().getContentAsString().equals(getAllAdminsExpected));
     }
     
     @Test
     public void getAdminByIDTest() throws Exception {
-    	
-    	String pm = "{\"pkey\":1}";
 
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
-        
-        String admin = "{\"firstName\":\"HyunSu\"," +
-                "\"lastName\":\"An\"," +
-                "\"id\":\"260775639\"," +
-                "\"password\":\"hi\"," +
-                "\"email\":\"1234@gmail.com\"," +
-                "\"parkingManager\":" +
-                " {\"pkey\":\"1\"}}";
-        
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(admin))
+                .content(admin1))
                 .andDo(print())
                 .andExpect(status().isOk());
-        
-        String resultString = "{\"password\":\"hi\"," +
-                "\"email\":\"1234@gmail.com\"," +
-                "\"first_name\":\"HyunSu\"," +
-                "\"last_Name\":\"An\"," +
-                "\"userID\":\"260775639\"}";
-        
-        ResultActions getByIDResult = mockMvc.perform(get("/admin/id/260775639")
+
+        ResultActions getByIDResult = mockMvc.perform(get("/admin/id/id1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
         
         MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(resultString));
+        assertThat(resultBody.getResponse().getContentAsString().equals(admin1Expected));
     }
     
 }

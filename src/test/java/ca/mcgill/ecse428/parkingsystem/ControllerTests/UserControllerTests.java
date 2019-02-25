@@ -32,6 +32,8 @@ public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    String pm = "{\"pkey\":1}";
+
     String user1 = "{\"firstName\":\"Firstname1\"," +
             "\"lastName\":\"Lastname1\"," +
             "\"id\":\"id1\"," +
@@ -89,8 +91,6 @@ public class UserControllerTests {
 
     @Before
     public void setup() throws Exception {
-        String pm = "{\"pkey\":1}";
-
         mockMvc.perform(post("/manager")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(pm))
