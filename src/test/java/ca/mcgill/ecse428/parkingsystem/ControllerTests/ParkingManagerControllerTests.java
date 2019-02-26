@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +29,8 @@ public class ParkingManagerControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    String manager1 = "{\"pkey\":1}";
-
-    String manager2 = "{\"pkey\":2}";
+    @Autowired
+    ParkingManagerRepository pmr;
 
     String managerExpected = "{\"pkey\":\"1\"," +
             "\"users\":[]," +
@@ -42,45 +42,10 @@ public class ParkingManagerControllerTests {
     String allManagersExpected = "{\"pkey\":\"1\"," +
             "\"users\":[],\"admins\":[]," +
             "\"parkingSpots\":[],\"reservations\":[]," +
-            "\"reviews\":[], \"pkey\":\"2\"," +
-            "\"users\":[],\"admins\":[]," +
-            "\"parkingSpots\":[],\"reservations\":[]," +
             "\"reviews\":[]}";
 
-    @After
-    public void tearDown() throws Exception {
-        mockMvc.perform(delete("/manager/pkey/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
-    }
-
-    @Test
-    public void addManagerTest() throws Exception {
-
-    	ResultActions result = mockMvc.perform(post("/manager")
-    			.contentType(MediaType.APPLICATION_JSON)
-    			.content(manager1))
-    			.andDo(print())
-    			.andExpect(status().isOk());
-
-    	MvcResult resultBody = result.andReturn();
-    	assertTrue(resultBody.getResponse().getContentAsString().equals(managerExpected));
-    }
-    
     @Test
     public void getAllManagersTest() throws Exception {
-    	
-    	mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(manager1))
-                .andDo(print())
-                .andExpect(status().isOk());
-    	
-    	mockMvc.perform(post("/manager")
-    			.contentType(MediaType.APPLICATION_JSON)
-    			.content(manager2))
-    			.andDo(print())
-    			.andExpect(status().isOk());
 
     	ResultActions getAllResult = mockMvc.perform(get("/manager/all")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -92,13 +57,7 @@ public class ParkingManagerControllerTests {
     
     @Test
     public void getManagerByIDTest() throws Exception {
-    	
-    	mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(manager1))
-                .andDo(print())
-                .andExpect(status().isOk());
-    	
+
     	ResultActions getByIDResult = mockMvc.perform(get("/manager/id/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());

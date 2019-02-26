@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
+import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +31,10 @@ public class AdminControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    String pm = "{\"pkey\":1}";
+    @Autowired
+    private ParkingManagerRepository pmr;
+
+    String pm = "{\"pkey\":2}";
 
     String admin1 = "{\"firstName\":\"Firstname1\"," +
             "\"lastName\":\"Lastname1\"," +
@@ -37,7 +42,7 @@ public class AdminControllerTests {
             "\"password\":\"password1\"," +
             "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
             "\"parkingManager\":" +
-            " {\"pkey\":\"1\"}}";
+            " {\"pkey\":\"2\"}}";
 
     String admin2 = "{\"firstName\":\"Firstname2\"," +
             "\"lastName\":\"Lastname2\"," +
@@ -45,7 +50,7 @@ public class AdminControllerTests {
             "\"password\":\"psasword2\"," +
             "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
             "\"parkingManager\":" +
-            " {\"pkey\":\"1\"}}";
+            " {\"pkey\":\"2\"}}";
 
     String admin1Expected = "{\"password\":\"password1\"," +
             "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
@@ -66,17 +71,13 @@ public class AdminControllerTests {
 
     @Before
     public void setup() throws Exception {
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
+        ParkingManager pm = new ParkingManager("2");
+        pmr.addManager(pm);
     }
 
     @After
     public void tearDown() throws Exception {
-        mockMvc.perform(delete("/manager/pkey/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        pmr.deleteManager("2");
     }
 
     @Test
