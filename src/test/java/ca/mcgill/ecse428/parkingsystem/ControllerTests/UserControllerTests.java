@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
+import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +34,8 @@ public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    String pm = "{\"pkey\":1}";
+    @Autowired
+    ParkingManagerRepository pmr;
 
     String user1 = "{\"firstName\":\"Firstname1\"," +
             "\"lastName\":\"Lastname1\"," +
@@ -42,7 +45,7 @@ public class UserControllerTests {
             "\"isRenter\":\"true\"," +
             "\"isSeller\":\"false\"," +
             "\"parkingManager\":" +
-            " {\"pkey\":\"1\"}}";
+            " {\"pkey\":\"2\"}}";
 
     String user2 = "{\"firstName\":\"Firstname2\"," +
             "\"lastName\":\"Lastname2\"," +
@@ -52,7 +55,7 @@ public class UserControllerTests {
             "\"isRenter\":\"false\"," +
             "\"isSeller\":\"true\"," +
             "\"parkingManager\":" +
-            " {\"pkey\":\"1\"}}";
+            " {\"pkey\":\"2\"}}";
 
     String user1Expected = "{\"password\":\"password1\"," +
             "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
@@ -91,17 +94,13 @@ public class UserControllerTests {
 
     @Before
     public void setup() throws Exception {
-        mockMvc.perform(post("/manager")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(pm))
-                .andDo(print());
+        ParkingManager pm = new ParkingManager("2");
+        pmr.addManager(pm);
     }
 
     @After
     public void tearDown() throws Exception {
-        mockMvc.perform(delete("/manager/pkey/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+        pmr.deleteManager("2");
     }
 
     @Test
