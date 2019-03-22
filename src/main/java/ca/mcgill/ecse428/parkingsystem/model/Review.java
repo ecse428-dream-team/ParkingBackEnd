@@ -5,6 +5,8 @@ package ca.mcgill.ecse428.parkingsystem.model;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -25,7 +27,7 @@ public class Review {
 	// ------------------------
 
 	// Review Attributes
-	private String pKey;
+	private int pKey;
 	private float rating;
 	private String comment;
 
@@ -39,10 +41,9 @@ public class Review {
 	// CONSTRUCTOR
 	// ------------------------
 	@JsonCreator
-	public Review(@JsonProperty("pkey") String aPKey, @JsonProperty("rating") float aRating,
+	public Review(@JsonProperty("rating") float aRating,
 			@JsonProperty("comment") String aComment, @JsonProperty("parkingManager") ParkingManager aParkingManager,
 			@JsonProperty("spot") ParkingSpot aParkingSpot) {
-		pKey = aPKey;
 		rating = aRating;
 		comment = aComment;
 		boolean didAddParkingManager = setParkingManager(aParkingManager);
@@ -61,7 +62,7 @@ public class Review {
 	// INTERFACE
 	// ------------------------
 
-	public boolean setPKey(String aPKey) {
+	public boolean setPKey(int aPKey) {
 		boolean wasSet = false;
 		pKey = aPKey;
 		wasSet = true;
@@ -83,7 +84,8 @@ public class Review {
 	}
 
 	@Id
-	public String getPKey() {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	public int getPKey() {
 		return pKey;
 	}
 

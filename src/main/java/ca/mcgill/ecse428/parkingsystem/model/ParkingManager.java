@@ -389,7 +389,7 @@ public class ParkingManager {
 	/* Code from template association_AddManyToOne */
 	public ParkingSpot addParkingSpot(String aPKey, int aStreet_Number, String aSteet_Name, String aPostal_Code,
 			float aAvg_Rating, float aCurrent_Price, User aUser) {
-		return new ParkingSpot(aPKey, aStreet_Number, aSteet_Name, aPostal_Code, aAvg_Rating, aCurrent_Price, aUser,
+		return new ParkingSpot(aStreet_Number, aSteet_Name, aPostal_Code, aAvg_Rating, aCurrent_Price, aUser,
 				this);
 	}
 
@@ -462,7 +462,7 @@ public class ParkingManager {
 	/* Code from template association_AddManyToOne */
 	public Reservation addReservation(String aPKey, String aVehicle_Plate, Date aStart_Date, Date aEnd_Date,
 			float aPrice_Paid, int aStart_Time, int aEnd_Time, User aUser, ParkingSpot aParkingSpot) {
-		return new Reservation(aPKey, aVehicle_Plate, aStart_Date, aEnd_Date, aPrice_Paid, aStart_Time, aEnd_Time,
+		return new Reservation(aVehicle_Plate, aStart_Date, aEnd_Date, aPrice_Paid, aStart_Time, aEnd_Time,
 				aUser, this, aParkingSpot);
 	}
 
@@ -534,7 +534,7 @@ public class ParkingManager {
 
 	/* Code from template association_AddManyToOne */
 	public Review addReview(String aPKey, float aRating, String aComment, ParkingSpot aParkingSpot) {
-		return new Review(aPKey, aRating, aComment, this, aParkingSpot);
+		return new Review(aRating, aComment, this, aParkingSpot);
 	}
 
 	public boolean addReview(Review aReview) {
