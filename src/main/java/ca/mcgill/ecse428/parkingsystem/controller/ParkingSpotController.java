@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
+import ca.mcgill.ecse428.parkingsystem.model.User;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingSpotRepository;
 
 @RestController
@@ -58,11 +59,7 @@ public class ParkingSpotController {
 		List<ParkingSpot> parkingSpots = repository.partialSearchByPostalCode(code);
 		return new ResponseEntity<List<ParkingSpot>>(parkingSpots, null, HttpStatus.OK);
 	}
-	
-//	@GetMapping(path = "/advance/search2/{field}/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
-//	public ResponseEntity<List<ParkingSpot>> advancedFloatFieldSearch(@PathVariable String field, @PathVariable float value) {
-//		return new ResponseEntity<List<ParkingSpot>>(repository.advancedFloatFieldSearch(field, value), null, HttpStatus.OK);
-//	}
+
 	
 	@GetMapping(path = "/partialSearch/underPrice/{price}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<ParkingSpot>> partialSearchByPrice(@PathVariable float price) {
@@ -76,8 +73,10 @@ public class ParkingSpotController {
 		return new ResponseEntity<List<ParkingSpot>>(parkingSpots, null, HttpStatus.OK);
 	}
 	
-//	@GetMapping(path = "/advance/search3/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
-//	public ResponseEntity<List<ParkingSpot>> advancedStringFieldSearch(@PathVariable int value) {
-//		return new ResponseEntity<List<ParkingSpot>>(repository.advancedSearchByStreetNum(value), null, HttpStatus.OK);
-//	}
+	@GetMapping(path = "/getOwner/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<User> getOwnerFromId(@PathVariable int id) {
+		User owner = repository.getOwnerFromId(id);
+		return new ResponseEntity<User>(owner, null, HttpStatus.OK);
+	}
+	
 }

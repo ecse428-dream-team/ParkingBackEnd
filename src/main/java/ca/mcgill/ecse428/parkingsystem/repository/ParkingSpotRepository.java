@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
 import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
 import ca.mcgill.ecse428.parkingsystem.model.Reservation;
+import ca.mcgill.ecse428.parkingsystem.model.User;
 
 @Repository
 public class ParkingSpotRepository {
@@ -148,6 +149,12 @@ public class ParkingSpotRepository {
 		}
 		
 		return goodSpots;
+	}
+
+	public User getOwnerFromId(int id) {
+		ParkingSpot spot = entityManager.find(ParkingSpot.class, id);
+		User owner = spot.getUser();
+		return owner;
 	}
 	
 }
