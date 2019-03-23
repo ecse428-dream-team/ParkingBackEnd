@@ -85,5 +85,20 @@ public class ReservationRepository {
 		
 		return reservations;
 	}
+
+    @Transactional
+    public List<Reservation> getReservationForUser(String id){
+        User usr = entityManager.find(User.class, id);
+        List<Reservation> reservations = new ArrayList<Reservation>();
+
+        if(usr.hasReservations()) {
+            for(int i = 0; i < usr.getReservations().size(); i++) {
+                Reservation reservation = usr.getReservation(i);
+                reservations.add(reservation);
+            }
+        }
+
+        return reservations;
+    }
 	
 }

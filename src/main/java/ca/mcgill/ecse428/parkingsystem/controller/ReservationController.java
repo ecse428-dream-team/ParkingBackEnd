@@ -44,12 +44,18 @@ public class ReservationController {
 		return new ResponseEntity<>(Reservations, null, HttpStatus.OK);
 	}
 
+    @GetMapping(path = "/forUser/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<Reservation>> getReservationsForUser(@PathVariable String id){
+        List<Reservation> Reservations = repository.getReservationForUser(id);
+        return new ResponseEntity<>(Reservations, null, HttpStatus.OK);
+    }
+
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public Reservation addReservation(@RequestBody Reservation rsv) {
 		return repository.addReservation(rsv);
 	}
 	
-	@DeleteMapping(path = "/delete/{pKey}")
+	@PostMapping(path = "/delete/{pKey}")
 	public ResponseEntity<String> deleteReservation(@PathVariable int pKey) {
 		boolean isDeleted = repository.deleteReservation(pKey);
 		if(isDeleted) {
