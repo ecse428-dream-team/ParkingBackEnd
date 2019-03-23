@@ -1,6 +1,6 @@
 package ca.mcgill.ecse428.parkingsystem.repository;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +131,7 @@ public class ParkingSpotRepository {
 			ParkingSpot current = ParkingSpots.get(i);
 			List<Reservation> reservations = current.getReservations();
 		
-			for(int j = 0; i < reservations.size(); j++) 
+			for(int j = 0; j < reservations.size(); j++) 
 			{
 				Reservation currentReservation = reservations.get(j);
 				if(currentReservation.getStart_Date().before(end) && currentReservation.getEnd_Date().after(start)) 
@@ -141,7 +141,7 @@ public class ParkingSpotRepository {
 				}
 			}
 			
-			if(isBad = false) {
+			if(isBad == false) {
 				goodSpots.add(current);
 			}
 		}

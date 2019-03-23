@@ -74,6 +74,7 @@ public class ParkingSpot {
 			@JsonProperty("avgRating") float aAvg_Rating, @JsonProperty("currentPrice") float aCurrent_Price,
 			@JsonProperty("user") User aUser,@JsonProperty("parkingManager") ParkingManager aParkingManager) {
 		street_Number = aStreet_Number;
+		street_Name = aSteet_Name;
 		postal_Code = aPostal_Code;
 		avg_Rating = aAvg_Rating;
 		current_Price = aCurrent_Price;
