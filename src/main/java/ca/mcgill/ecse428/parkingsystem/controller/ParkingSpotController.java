@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import ca.mcgill.ecse428.parkingsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -81,7 +82,7 @@ public class ParkingSpotController {
 	public ResponseEntity<List<ParkingSpot>> getFreeSpots(
 			@RequestParam(name = "startDate") String startDate,
 			@RequestParam(name = "endDate") String endDate) {
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date sDate = null;
 		try {
 			sDate = format.parse(startDate);
@@ -97,5 +98,11 @@ public class ParkingSpotController {
 		List<ParkingSpot> freeSpots = repository.getBetweenTime(sDate, eDate);
 		return new ResponseEntity<List<ParkingSpot>>(freeSpots, null, HttpStatus.OK);
 	}
+
+    @GetMapping(path = "/getOwner/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<User> getOwnerFromId(@PathVariable int id) {
+        User owner = repository.getOwnerFromId(id);
+        return new ResponseEntity<User>(owner, null, HttpStatus.OK);
+    }
 
 }

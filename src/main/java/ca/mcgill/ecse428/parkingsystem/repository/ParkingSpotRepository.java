@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import ca.mcgill.ecse428.parkingsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -148,5 +149,12 @@ public class ParkingSpotRepository {
 		
 		return goodSpots;
 	}
+
+	@Transactional
+    public User getOwnerFromId(int id) {
+        ParkingSpot spot = entityManager.find(ParkingSpot.class, id);
+        User owner = spot.getUser();
+        return owner;
+    }
 	
 }
