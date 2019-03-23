@@ -69,7 +69,6 @@ public class UserController {
 			}
 
 		} else {
-			System.out.println("======================================");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 	}

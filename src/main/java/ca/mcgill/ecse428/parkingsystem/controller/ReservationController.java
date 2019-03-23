@@ -37,6 +37,12 @@ public class ReservationController {
 		List<Reservation> Reservations = repository.getReservations();
 		return new ResponseEntity<>(Reservations, null, HttpStatus.OK);
 	}
+	
+	@GetMapping(path = "/fromUserSpot/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<Reservation>> getReservationFromUserSpot(@PathVariable String id){
+		List<Reservation> Reservations = repository.getReservationFromUserSpot(id);
+		return new ResponseEntity<>(Reservations, null, HttpStatus.OK);
+	}
 
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public Reservation addReservation(@RequestBody Reservation rsv) {
@@ -52,5 +58,7 @@ public class ReservationController {
 			return new ResponseEntity<String>("Reservation could not be found.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+
 	
 }

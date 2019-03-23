@@ -69,4 +69,21 @@ public class ReservationRepository {
 		return isDeleted;
 	}
 	
+	@Transactional
+	public List<Reservation> getReservationFromUserSpot(String id){
+		User usr = entityManager.find(User.class, id);
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		
+		if(usr.hasParkingSpots()) {
+			for(int i = 0; i < usr.getParkingSpots().size(); i++) {
+				ParkingSpot spot = usr.getParkingSpot(i);
+				for(int j = 0; j < spot.getReservations().size(); j++) {
+					reservations.add(spot.getReservation(j));
+				}
+			}
+		}
+		
+		return reservations;
+	}
+	
 }
