@@ -50,7 +50,7 @@ public class ParkingSpotRepository {
 
 		List<ParkingSpot> parkingSpots;
 		parkingSpots = entityManager
-				.createQuery("SELECT e FROM ParkingSpot e WHERE e.id LIKE CONCAT('%', :custId, '%')", ParkingSpot.class)
+				.createQuery("SELECT e FROM ParkingSpot e WHERE e.pKey LIKE CONCAT('%', :custId, '%')", ParkingSpot.class)
 				.setParameter("custId", id).getResultList();
 		return parkingSpots;
 	}
@@ -60,7 +60,7 @@ public class ParkingSpotRepository {
 
 		List<ParkingSpot> parkingSpots;
 		parkingSpots = entityManager
-				.createQuery("SELECT e FROM ParkingSpot e WHERE e.steet_Name LIKE CONCAT('%', :custName, '%')", ParkingSpot.class)
+				.createQuery("SELECT e FROM ParkingSpot e WHERE e.street_Name LIKE CONCAT('%', :custName, '%')", ParkingSpot.class)
 				.setParameter("custName", name).getResultList();
 		return parkingSpots;
 	}

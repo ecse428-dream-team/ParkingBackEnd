@@ -1,5 +1,6 @@
 package ca.mcgill.ecse428.parkingsystem.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.parkingsystem.model.ParkingSpot;
@@ -59,11 +61,6 @@ public class ParkingSpotController {
 		return new ResponseEntity<List<ParkingSpot>>(parkingSpots, null, HttpStatus.OK);
 	}
 	
-//	@GetMapping(path = "/advance/search2/{field}/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
-//	public ResponseEntity<List<ParkingSpot>> advancedFloatFieldSearch(@PathVariable String field, @PathVariable float value) {
-//		return new ResponseEntity<List<ParkingSpot>>(repository.advancedFloatFieldSearch(field, value), null, HttpStatus.OK);
-//	}
-	
 	@GetMapping(path = "/partialSearch/underPrice/{price}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<ParkingSpot>> partialSearchByPrice(@PathVariable float price) {
 		List<ParkingSpot> parkingSpots = repository.partialSearchByUnderPrice(price);
@@ -76,8 +73,11 @@ public class ParkingSpotController {
 		return new ResponseEntity<List<ParkingSpot>>(parkingSpots, null, HttpStatus.OK);
 	}
 	
-//	@GetMapping(path = "/advance/search3/{value}", produces = { MediaType.APPLICATION_JSON_VALUE })
-//	public ResponseEntity<List<ParkingSpot>> advancedStringFieldSearch(@PathVariable int value) {
-//		return new ResponseEntity<List<ParkingSpot>>(repository.advancedSearchByStreetNum(value), null, HttpStatus.OK);
-//	}
+	@GetMapping(path = "/getFreeSpots", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<ParkingSpot>> getFreeSpots(@RequestParam Date startDate, @RequestParam Date endDate){
+		List<ParkingSpot> freeSpots = repository.getBetweenTime(startDate, endDate);
+		return new ResponseEntity<List<ParkingSpot>>(freeSpots, null, HttpStatus.OK);
+	}
+	
+
 }
