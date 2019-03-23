@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -76,20 +77,20 @@ public class ParkingSpotControllerTests {
             "\"parkingManager\" : {\"pkey\" : \"2\"}}," +
             "\"parkingManager\" : {\"pkey\" : \"2\"}}";
 
-    String allParkingSpotsExpected = "{\"pkey\":\"1\"," +
+    String allParkingSpotsExpected = "[{\"pkey\":\"1\"," +
             "\"street_Number\":1234," +
             "\"street_Name\":\"Kennedy\"," +
             "\"postal_Code\":\"H0H 0H0\"," +
             "\"avg_Rating\":0.0," +
             "\"current_Price\":20.0," +
-            "\"reviews\":[]," +
-            "\"pkey\":\"2\"," +
+            "\"reviews\":[]}," +
+            "{\"pkey\":\"2\"," +
             "\"street_Number\":5678," +
             "\"street_Name\":\"Sherbrooke\"," +
             "\"postal_Code\":\"A1B 2C3\"," +
             "\"avg_Rating\":0.0," +
             "\"current_Price\":20.0," +
-            "\"reviews\":[]}";
+            "\"reviews\":[]}]";
 
     String parkingSpotExpected = "{\"pkey\":\"1\"," +
             "\"street_Number\":1234," +
@@ -125,7 +126,7 @@ public class ParkingSpotControllerTests {
                 .andExpect(status().isOk());
         
         MvcResult resultBody = result.andReturn();
-        assertTrue(resultBody.getResponse().getContentAsString().equals(parkingSpotExpected));
+        assertEquals(parkingSpotExpected, resultBody.getResponse().getContentAsString());
     }
     
     @Test
@@ -149,7 +150,7 @@ public class ParkingSpotControllerTests {
                 .andDo(print());
         
         MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(allParkingSpotsExpected));
+        assertEquals(allParkingSpotsExpected, resultBody.getResponse().getContentAsString());
     }
     
     @Test
@@ -166,6 +167,6 @@ public class ParkingSpotControllerTests {
                 .andDo(print());
         
         MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(parkingSpotExpected));
+        assertEquals(parkingSpotExpected, resultBody.getResponse().getContentAsString());
     }
 }

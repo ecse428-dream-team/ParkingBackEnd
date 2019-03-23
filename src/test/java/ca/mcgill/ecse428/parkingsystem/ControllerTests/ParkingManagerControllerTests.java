@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,11 +40,12 @@ public class ParkingManagerControllerTests {
             "\"reservations\":[]," +
             "\"reviews\":[]}";
 
-    String allManagersExpected = "{\"pkey\":\"1\"," +
+    String allManagersExpected = "[{\"pkey\":\"1\"," +
             "\"users\":[],\"admins\":[]," +
             "\"parkingSpots\":[],\"reservations\":[]," +
-            "\"reviews\":[]}";
-
+            "\"reviews\":[]}]";
+    
+    
     @Test
     public void getAllManagersTest() throws Exception {
 
@@ -52,7 +54,7 @@ public class ParkingManagerControllerTests {
                 .andDo(print());
     	
     	MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(allManagersExpected));
+        assertEquals(allManagersExpected, resultBody.getResponse().getContentAsString());
     }
     
     @Test
