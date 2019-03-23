@@ -44,10 +44,10 @@ public class ReservationController {
 	}
 	
 	@DeleteMapping(path = "/delete/{pKey}")
-	public ResponseEntity<String> deleteReservation(@PathVariable String pKey) {
+	public ResponseEntity<String> deleteReservation(@PathVariable int pKey) {
 		boolean isDeleted = repository.deleteReservation(pKey);
 		if(isDeleted) {
-			return new ResponseEntity<String>("Reservation successfully deleted.", HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("Reservation successfully deleted.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("Reservation could not be found.", HttpStatus.BAD_REQUEST);
 		}

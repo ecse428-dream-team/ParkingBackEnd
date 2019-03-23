@@ -46,7 +46,7 @@ public class ReservationRepository {
 	//	3) Vertify the system so the reservation spot should be available
 	
 	@Transactional
-	public Boolean deleteReservation(String pKey) {
+	public Boolean deleteReservation(int pKey) {
 		Boolean isDeleted = false; 
 		Reservation retrievedReservation = entityManager.find(Reservation.class, pKey);
 		if (retrievedReservation == null) {
