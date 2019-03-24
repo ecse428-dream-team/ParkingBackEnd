@@ -9,8 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,18 @@ public class ParkingManagerControllerTests {
             "\"parkingSpots\":[],\"reservations\":[]," +
             "\"reviews\":[]}]";
     
+
+    @Before
+    public void setup() throws Exception {
+        ParkingManager pm = new ParkingManager("1");
+        pmr.addManager(pm);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        pmr.deleteManager("1");
+    }
+
     
     @Test
     public void getAllManagersTest() throws Exception {
@@ -65,7 +79,7 @@ public class ParkingManagerControllerTests {
                 .andDo(print());
     	
     	MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(managerExpected));
+        assertEquals(managerExpected, resultBody.getResponse().getContentAsString());
     }
 
 }

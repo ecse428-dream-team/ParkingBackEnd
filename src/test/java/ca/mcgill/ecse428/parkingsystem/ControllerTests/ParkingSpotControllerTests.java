@@ -45,8 +45,7 @@ public class ParkingSpotControllerTests {
             "\"parkingManager\":" +
             " {\"pkey\":\"2\"}}";
 
-    String parkingSpot1 = "{\"pkey\" : \"1\"," +
-            "\"addressNumber\" : \"1234\"," +
+    String parkingSpot1 = "{\"addressNumber\" : \"1234\"," +
             "\"streetName\" : \"Kennedy\"," +
             "\"postalCode\" : \"H0H 0H0\"," +
             "\"avgRating\" : \"0\"," +
@@ -61,8 +60,7 @@ public class ParkingSpotControllerTests {
             " \"parkingManager\" : {\"pkey\" : \"2\"}}," +
             "\"parkingManager\" : {\"pkey\" : \"2\"}}";
 
-    String parkingSpot2 = "{\"pkey\" : \"2\"," +
-            "\"addressNumber\" : \"5678\"," +
+    String parkingSpot2 = "{\"addressNumber\" : \"5678\"," +
             "\"streetName\" : \"Sherbrooke\"," +
             "\"postalCode\" : \"A1B 2C3\"," +
             "\"avgRating\" : \"0\"," +
@@ -77,31 +75,22 @@ public class ParkingSpotControllerTests {
             "\"parkingManager\" : {\"pkey\" : \"2\"}}," +
             "\"parkingManager\" : {\"pkey\" : \"2\"}}";
 
-    String allParkingSpotsExpected = "[{\"pkey\":\"1\"," +
-            "\"street_Number\":1234," +
-            "\"street_Name\":\"Kennedy\"," +
-            "\"postal_Code\":\"H0H 0H0\"," +
-            "\"avg_Rating\":0.0," +
-            "\"current_Price\":20.0," +
-            "\"reviews\":[]}," +
-            "{\"pkey\":\"2\"," +
-            "\"street_Number\":5678," +
-            "\"street_Name\":\"Sherbrooke\"," +
-            "\"postal_Code\":\"A1B 2C3\"," +
-            "\"avg_Rating\":0.0," +
-            "\"current_Price\":20.0," +
-            "\"reviews\":[]}]";
 
-    String parkingSpotExpected = "{\"pkey\":\"1\"," +
-            "\"street_Number\":1234," +
-            "\"street_Name\":\"Kennedy\"," +
-            "\"postal_Code\":\"H0H 0H0\"," +
-            "\"avg_Rating\":0.0," +
-            "\"current_Price\":20.0,\"reviews\":[]}";
+    String allParkingSpotsExpected = "[{\"street_Number\":1234,"
+    		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
+    		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],"
+    		+ "\"pkey\":1},{\"street_Number\":5678,\"street_Name\":\"Sherbrooke\","
+    		+ "\"postal_Code\":\"A1B 2C3\",\"avg_Rating\":0.0,\"current_Price\":20.0,"
+    		+ "\"reviews\":[],\"pkey\":2}]";
+
+    String parkingSpotExpected = "{\"street_Number\":1234,"
+    		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
+    		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],\"pkey\":1}";
+
 
     @Before
     public void setup() throws Exception {
-        ParkingManager pm = new ParkingManager("2");
+        ParkingManager pm = new ParkingManager("1");
         pmr.addManager(pm);
 
         mockMvc.perform(post("/user")
@@ -113,7 +102,9 @@ public class ParkingSpotControllerTests {
 
     @After
     public void tearDown() throws Exception {
-        pmr.deleteManager("2");
+        pmr.deleteManager("1");
+        
+        
     }
     
     @Test
