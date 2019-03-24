@@ -30,7 +30,7 @@ public class ParkingSpotController {
 	ParkingSpotRepository repository;
 
 	@GetMapping(path = "/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ParkingSpot> getParkingSpot(@PathVariable String id) {
+	public ResponseEntity<ParkingSpot> getParkingSpot(@PathVariable int id) {
 		ParkingSpot parkingSpotFound = repository.getParkingSpot(id);
 		return new ResponseEntity<ParkingSpot>(parkingSpotFound, null, HttpStatus.OK);
 	}

@@ -35,7 +35,7 @@ public class ParkingSpotRepository {
 	// All methods below here pertains to the story "A renter should be able to
 	// browse available parking spots"
 	@Transactional
-	public ParkingSpot getParkingSpot(String id) {
+	public ParkingSpot getParkingSpot(int id) {
 		ParkingSpot foundParkingSpot = entityManager.find(ParkingSpot.class, id);
 		return foundParkingSpot;
 	}
