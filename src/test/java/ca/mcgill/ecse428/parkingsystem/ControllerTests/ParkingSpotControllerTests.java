@@ -1,6 +1,7 @@
 package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -12,9 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +32,8 @@ import org.springframework.test.web.servlet.ResultActions;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class ParkingSpotControllerTests {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -76,21 +81,9 @@ public class ParkingSpotControllerTests {
             "\"parkingManager\" : {\"pkey\" : \"2\"}}";
 
 
-    String allParkingSpotsExpected = "[{\"street_Number\":1234,"
-    		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
-    		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],"
-    		+ "\"pkey\":1},{\"street_Number\":5678,\"street_Name\":\"Sherbrooke\","
-    		+ "\"postal_Code\":\"A1B 2C3\",\"avg_Rating\":0.0,\"current_Price\":20.0,"
-    		+ "\"reviews\":[],\"pkey\":2}]";
-
-    String parkingSpotExpected = "{\"street_Number\":1234,"
-    		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
-    		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],\"pkey\":1}";
-
-
     @Before
     public void setup() throws Exception {
-        ParkingManager pm = new ParkingManager("1");
+        ParkingManager pm = new ParkingManager("2");
         pmr.addManager(pm);
 
         mockMvc.perform(post("/user")
@@ -102,7 +95,7 @@ public class ParkingSpotControllerTests {
 
     @After
     public void tearDown() throws Exception {
-        pmr.deleteManager("1");
+        pmr.deleteManager("2");
         
         
     }
@@ -110,6 +103,10 @@ public class ParkingSpotControllerTests {
     @Test
     public void addParkingSpotTest() throws Exception {
 
+    	String parkingSpotExpected = "{\"street_Number\":1234,"
+        		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
+        		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],\"pkey\":1}";
+    	
         ResultActions result = mockMvc.perform(post("/spot")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(parkingSpot1))
@@ -123,7 +120,13 @@ public class ParkingSpotControllerTests {
     @Test
     public void getAllParkingSpotsTest() throws Exception {
 
-
+    	String allParkingSpotsExpected = "[{\"street_Number\":1234,"
+        		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
+        		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],"
+        		+ "\"pkey\":2},{\"street_Number\":5678,\"street_Name\":\"Sherbrooke\","
+        		+ "\"postal_Code\":\"A1B 2C3\",\"avg_Rating\":0.0,\"current_Price\":20.0,"
+        		+ "\"reviews\":[],\"pkey\":3}]";
+    	
         mockMvc.perform(post("/spot")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(parkingSpot1))
@@ -147,13 +150,17 @@ public class ParkingSpotControllerTests {
     @Test
     public void getParkingSpotByIDTest() throws Exception {
 
+    	String parkingSpotExpected = "{\"street_Number\":1234,"
+        		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
+        		+ "\"avg_Rating\":0.0,\"current_Price\":20.0,\"reviews\":[],\"pkey\":4}";
+    	
         mockMvc.perform(post("/spot")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(parkingSpot1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        ResultActions getByIDResult = mockMvc.perform(get("/spot/id/1")
+        ResultActions getByIDResult = mockMvc.perform(get("/spot/id/4")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
         

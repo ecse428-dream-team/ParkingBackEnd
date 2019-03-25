@@ -45,18 +45,20 @@ public class ParkingManagerControllerTests {
     String allManagersExpected = "[{\"pkey\":\"1\"," +
             "\"users\":[],\"admins\":[]," +
             "\"parkingSpots\":[],\"reservations\":[]," +
-            "\"reviews\":[]}]";
+            "\"reviews\":[]},{\"pkey\":\"2\",\"users\":[],"
+            + "\"admins\":[],\"parkingSpots\":[],\"reservations\":[],"
+            + "\"reviews\":[]}]";
     
 
     @Before
     public void setup() throws Exception {
-        ParkingManager pm = new ParkingManager("1");
+        ParkingManager pm = new ParkingManager("2");
         pmr.addManager(pm);
     }
 
     @After
     public void tearDown() throws Exception {
-        pmr.deleteManager("1");
+        pmr.deleteManager("2");
     }
 
     
