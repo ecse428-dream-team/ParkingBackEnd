@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse428.parkingsystem.model.Admin;
 import ca.mcgill.ecse428.parkingsystem.repository.AdminRepository;
 
+/**
+ * Endpoints for the Admin class
+ * 
+*/
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -23,6 +28,12 @@ public class AdminController {
 	@Autowired
 	AdminRepository repository;
 	
+	/**
+	 * Calls method to get a specific Admin using his ID
+	 * 
+	 * @param id id of the user
+	 * @return ResponseEntity<Admin> Admim corresponding to that id, if any	
+	 */
     @GetMapping(path="/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Admin> getAdmin(@PathVariable String id) {
     	
@@ -31,6 +42,11 @@ public class AdminController {
 
     }
 	
+    /**
+     * Calls method to get all Admins in the database
+     * 
+     * @return ResponseEntity<List<Admin> Returns the list of all Admins
+     */
     @GetMapping(path="/all", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<List<Admin>>getAdmins()
 	{
@@ -38,6 +54,12 @@ public class AdminController {
 		return new ResponseEntity<List<Admin>>(admins, null, HttpStatus.OK);
 	}
     
+    /**
+     * Calls method to create an Admin and add it to the database
+     * 
+     * @param adm Admin to create and add to database
+     * @return Admin Return created Admin	
+     */
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	public Admin addAdmin(@RequestBody Admin adm) {
 	    return repository.addAdmin(adm);

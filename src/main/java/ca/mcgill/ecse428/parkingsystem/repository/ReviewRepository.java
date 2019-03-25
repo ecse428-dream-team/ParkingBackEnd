@@ -25,7 +25,7 @@ public class ReviewRepository {
 	}
 
 	@Transactional
-	public Review getReview(String id)
+	public Review getReview(int id)
 	{
 		Review foundReview = entityManager.find(Review.class, id);
 		return foundReview;
