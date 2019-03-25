@@ -26,7 +26,7 @@ public class ReservationController {
 	ReservationRepository repository;
 
 	@GetMapping(path = "/id/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Reservation> getReservation(@PathVariable String id) {
+	public ResponseEntity<Reservation> getReservation(@PathVariable int id) {
 
 		Reservation ReservationFound = repository.getReservation(id);
 		return new ResponseEntity<>(ReservationFound, null, HttpStatus.OK);

@@ -27,7 +27,7 @@ public class ReservationRepository {
 	}
 
 	@Transactional
-	public Reservation getReservation(String id)
+	public Reservation getReservation(int id)
 	{
 		Reservation foundReservation = entityManager.find(Reservation.class, id);
 		return foundReservation;
