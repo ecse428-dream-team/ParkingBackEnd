@@ -1,30 +1,43 @@
 package ca.mcgill.ecse428.parkingsystem.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import ca.mcgill.ecse428.parkingsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ca.mcgill.ecse428.parkingsystem.model.Admin;
 import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 
+/**
+ * Contains repository methods for the Parking Manager class. 
+ *
+ */
 @Repository
 public class ParkingManagerRepository {
 	
 	@Autowired
 	EntityManager entityManager;
 	
+	/**
+	 * Create and add a Parking Manager to the database. 
+	 * 
+	 * @param manager Manager to create and add to the database. 
+	 * @return Returns the created ParkingManager. 
+	 */
 	@Transactional
 	public ParkingManager addManager(ParkingManager manager) {
 		entityManager.persist(manager);
 		return manager;
 	}
 	
+	/**
+	 * Get a Parking Manager given its primary key. 
+	 * 
+	 * @param pKey Primary key of the desired Parking Manager. 
+	 * @return Returns the Parking Manager corresponding to the provided pkey. 
+	 */
 	@Transactional
 	public ParkingManager getParkingManager(String pKey)
 	{
@@ -36,6 +49,11 @@ public class ParkingManagerRepository {
 		return parkingManager.get(0);
 	}
 
+	/**
+	 * Get all Parking Managers that exist in the database. 
+	 * 
+	 * @return Returns a list of all ParkingManager that exist in the database. 
+	 */
 	@Transactional
 	public List<ParkingManager> getParkingManagers(){
         List<ParkingManager> parkingManagers = entityManager.createQuery("SELECT p FROM ParkingManager p", ParkingManager.class)
@@ -44,6 +62,12 @@ public class ParkingManagerRepository {
 		return parkingManagers;
 	}
 
+	/**
+	 * 
+	 * Delete a Parking Manager given its primary key. 
+	 * 
+	 * @param pkey Primary key of the Parking Manager to be deleted. 
+	 */
     @Transactional
     public void deleteManager(String pkey){
 

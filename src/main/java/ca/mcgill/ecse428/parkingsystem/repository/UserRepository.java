@@ -14,6 +14,10 @@ import ca.mcgill.ecse428.parkingsystem.model.Reservation;
 import ca.mcgill.ecse428.parkingsystem.model.Review;
 import ca.mcgill.ecse428.parkingsystem.model.User;
 
+/**
+ * Contains the repository methods for the User class.  
+ *
+ */
 
 @Repository
 public class UserRepository {
@@ -21,12 +25,24 @@ public class UserRepository {
 	@Autowired
 	EntityManager entityManager;
 	
+	/**
+	 * Create and add a user to the database. 
+	 * 
+	 * @param user User to be created and added to the database. 
+	 * @return Returns the added User. 
+	 */
 	@Transactional
 	public User addUser(User user) {
 		entityManager.persist(user);
 		return user;
 	}
 
+	/**
+	 * Get user with first name corresponding to the string given as param. 
+	 * 
+	 * @param firstName First name of the desired User. 
+	 * @return Returns the User with the first name given as param. 
+	 */
 	@Transactional
     public List<User> getUserByFirstName(String firstName) {
 	    List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.first_name LIKE :custName", User.class)
@@ -38,6 +54,12 @@ public class UserRepository {
         return null;
     }
 
+	/**
+	 * Get user with last name corresponding to the string given as param. 
+	 * 
+	 * @param lastName Last name of the desired User. 
+	 * @return Returns the User with the last name given as param. 
+	 */
     @Transactional
     public List<User> getUserByLastName(String lastName) {
         List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.last_Name LIKE :custName", User.class)
@@ -49,6 +71,12 @@ public class UserRepository {
         return null;
     }
 
+    /**
+     * Get user with id corresponding to the id given as param. 
+     * 
+     * @param id Id of the desired User. 
+     * @return Returns the User with Id corresponding to the id given as param. 
+     */
     @Transactional
     public User getUserById(String id) {
         List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.userID LIKE :custId", User.class)
@@ -60,7 +88,12 @@ public class UserRepository {
         return null;
 
     }
-    
+    /**
+     * Get user with email corresponding to the email given as param. 
+     * 
+     * @param email Email of the desired User. 
+     * @return Returns the User with email corresponding to theemail given as param. 
+     */
     @Transactional
     public User getUserByEmail(String email) {
         List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.email LIKE :custEmail", User.class)
@@ -73,7 +106,11 @@ public class UserRepository {
 
     }
 
-
+    /**
+     * Get a list of all Users that exist in the database. 
+     * 
+     * @return Returns a list of all User that exist in the database. 
+     */
 	@Transactional
 	public List<User> getAllUsers(){
 		List<User> users = entityManager.createQuery("SELECT a FROM User a", User.class)
@@ -83,6 +120,12 @@ public class UserRepository {
         return null;
 	}
 
+	/**
+	 * Delete User with id corresponding to the id given as param. 
+	 * 
+	 * @param username Id of the user to delete. 
+	 * @return Boolean confirming the deletion of the user. 
+	 */
 	@Transactional
 	public boolean deleteUser(String username) {
 		User usr = entityManager.find(User.class, username);
