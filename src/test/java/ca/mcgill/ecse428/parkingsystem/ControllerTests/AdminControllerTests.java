@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,8 +13,10 @@ import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class AdminControllerTests {
 
     @Autowired
@@ -47,7 +51,7 @@ public class AdminControllerTests {
     String admin2 = "{\"firstName\":\"Firstname2\"," +
             "\"lastName\":\"Lastname2\"," +
             "\"id\":\"id2\"," +
-            "\"password\":\"psasword2\"," +
+            "\"password\":\"password2\"," +
             "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
             "\"parkingManager\":" +
             " {\"pkey\":\"2\"}}";
@@ -58,16 +62,16 @@ public class AdminControllerTests {
             "\"last_Name\":\"Lastname1\"," +
             "\"userID\":\"id1\"}";
 
-    String getAllAdminsExpected = "{\"password\":\"password1\"," +
+    String getAllAdminsExpected = "[{\"password\":\"password1\"," +
             "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
             "\"first_name\":\"Firstname1\"," +
             "\"last_Name\":\"Lastname1\"," +
-            "\"userID\":\"id1\"," +
-            "\"password\":\"password2\"," +
+            "\"userID\":\"id1\"}," +
+            "{\"password\":\"password2\"," +
             "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
-            "\"first_name\":\"Firstname1\"," +
-            "\"last_Name\":\"Lastname1\"," +
-            "\"userID\":\"id2\"}";
+            "\"first_name\":\"Firstname2\"," +
+            "\"last_Name\":\"Lastname2\"," +
+            "\"userID\":\"id2\"}]";
 
     @Before
     public void setup() throws Exception {
@@ -81,7 +85,7 @@ public class AdminControllerTests {
     }
 
     @Test
-    public void addAdminTest() throws Exception {
+    public void test13_addAdminTest() throws Exception {
 
     	ResultActions result = mockMvc.perform(post("/admin")
     			.contentType(MediaType.APPLICATION_JSON)
@@ -90,19 +94,19 @@ public class AdminControllerTests {
     			.andExpect(status().isOk());
 
     	MvcResult resultBody = result.andReturn();
-    	assertTrue(resultBody.getResponse().getContentAsString().equals(admin1Expected));
+    	assertEquals(admin1Expected, resultBody.getResponse().getContentAsString());
     }
     
     @Test
-    public void getAllAdminsTest() throws Exception {
+    public void test14_getAllAdminsTest() throws Exception {
 
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/admin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(admin1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/admin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(admin2))
                 .andDo(print())
@@ -113,13 +117,13 @@ public class AdminControllerTests {
                 .andDo(print());
         
         MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(getAllAdminsExpected));
+        assertEquals(getAllAdminsExpected, resultBody.getResponse().getContentAsString());
     }
     
     @Test
-    public void getAdminByIDTest() throws Exception {
+    public void test15_getAdminByIDTest() throws Exception {
 
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/admin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(admin1))
                 .andDo(print())
