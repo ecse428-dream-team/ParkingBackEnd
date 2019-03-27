@@ -13,8 +13,10 @@ import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +33,7 @@ import java.util.Base64;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class UserControllerTests {
 
     @Autowired
@@ -102,7 +105,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void addRenterTest() throws Exception {
+    public void test03_addRenterTest() throws Exception {
 
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +121,7 @@ public class UserControllerTests {
     }
     
     @Test
-    public void addSellerTest() throws Exception {
+    public void test04_addSellerTest() throws Exception {
 
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +136,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void getAllUsersTest() throws Exception {
+    public void test05_getAllUsersTest() throws Exception {
 
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +161,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void getUserByFirstNameTest() throws Exception {
+    public void test06_getUserByFirstNameTest() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -178,7 +181,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void getUserByLastNameTest() throws Exception {
+    public void test07_getUserByLastNameTest() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -198,7 +201,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void getUserByIDTest() throws Exception {
+    public void test08_getUserByIDTest() throws Exception {
 
     	
         // Post to the local database
@@ -219,7 +222,7 @@ public class UserControllerTests {
     }
     
     @Test
-    public void deleteUserById() throws Exception 
+    public void test09_deleteUserById() throws Exception 
     {
 
         mockMvc.perform(post("/user")
@@ -239,7 +242,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticateWithEmail() throws Exception {
+    public void test10_authenticateWithEmail() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -260,7 +263,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticateWithUsername() throws Exception {
+    public void test11_authenticateWithUsername() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -281,7 +284,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticationFailsOnWrongCredentials() throws Exception {
+    public void test12_authenticationFailsOnWrongCredentials() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")

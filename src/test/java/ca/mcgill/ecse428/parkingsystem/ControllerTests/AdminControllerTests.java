@@ -13,8 +13,10 @@ import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class AdminControllerTests {
 
     @Autowired
@@ -82,7 +85,7 @@ public class AdminControllerTests {
     }
 
     @Test
-    public void addAdminTest() throws Exception {
+    public void test13_addAdminTest() throws Exception {
 
     	ResultActions result = mockMvc.perform(post("/admin")
     			.contentType(MediaType.APPLICATION_JSON)
@@ -95,7 +98,7 @@ public class AdminControllerTests {
     }
     
     @Test
-    public void getAllAdminsTest() throws Exception {
+    public void test14_getAllAdminsTest() throws Exception {
 
         mockMvc.perform(post("/admin")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +121,7 @@ public class AdminControllerTests {
     }
     
     @Test
-    public void getAdminByIDTest() throws Exception {
+    public void test15_getAdminByIDTest() throws Exception {
 
         mockMvc.perform(post("/admin")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -13,8 +13,10 @@ import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class ParkingManagerControllerTests {
 
     @Autowired
@@ -63,7 +66,7 @@ public class ParkingManagerControllerTests {
 
     
     @Test
-    public void getAllManagersTest() throws Exception {
+    public void test01_getAllManagersTest() throws Exception {
 
     	ResultActions getAllResult = mockMvc.perform(get("/manager/all")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -74,7 +77,7 @@ public class ParkingManagerControllerTests {
     }
     
     @Test
-    public void getManagerByIDTest() throws Exception {
+    public void test02_getManagerByIDTest() throws Exception {
 
     	ResultActions getByIDResult = mockMvc.perform(get("/manager/id/1")
                 .contentType(MediaType.APPLICATION_JSON))

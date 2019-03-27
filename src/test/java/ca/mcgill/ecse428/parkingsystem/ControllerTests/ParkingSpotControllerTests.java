@@ -101,7 +101,8 @@ public class ParkingSpotControllerTests {
     }
     
     @Test
-    public void addParkingSpotTest() throws Exception {
+    public void test16_addParkingSpotTest() throws Exception {
+    	// spot pkey = 1;
 
     	String parkingSpotExpected = "{\"street_Number\":1234,"
         		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
@@ -118,7 +119,7 @@ public class ParkingSpotControllerTests {
     }
     
     @Test
-    public void getAllParkingSpotsTest() throws Exception {
+    public void test17_getAllParkingSpotsTest() throws Exception {
 
     	String allParkingSpotsExpected = "[{\"street_Number\":1234,"
         		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
@@ -148,7 +149,7 @@ public class ParkingSpotControllerTests {
     }
     
     @Test
-    public void getParkingSpotByIDTest() throws Exception {
+    public void test18_getParkingSpotByIDTest() throws Exception {
 
     	String parkingSpotExpected = "{\"street_Number\":1234,"
         		+ "\"street_Name\":\"Kennedy\",\"postal_Code\":\"H0H 0H0\","
@@ -168,3 +169,4 @@ public class ParkingSpotControllerTests {
         assertEquals(parkingSpotExpected, resultBody.getResponse().getContentAsString());
     }
 }
+

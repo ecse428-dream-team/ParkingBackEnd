@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 // line 85 "../../../../../../../../ump/tmp788415/model.ump"
 @Entity
 @Table(name = "parkingspot")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParkingSpot {
 
 	// ------------------------
