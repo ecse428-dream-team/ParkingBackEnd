@@ -1,6 +1,7 @@
 package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,8 +13,10 @@ import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
 import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Base64;
 
@@ -29,6 +33,7 @@ import java.util.Base64;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)		// only works for JUnit 4 // HSA
 public class UserControllerTests {
 
     @Autowired
@@ -50,47 +55,43 @@ public class UserControllerTests {
     String user2 = "{\"firstName\":\"Firstname2\"," +
             "\"lastName\":\"Lastname2\"," +
             "\"id\":\"id2\"," +
-            "\"password\":\"psasword2\"," +
+            "\"password\":\"password2\"," +
             "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
             "\"isRenter\":\"false\"," +
             "\"isSeller\":\"true\"," +
             "\"parkingManager\":" +
             " {\"pkey\":\"2\"}}";
 
-    String user1Expected = "{\"password\":\"password1\"," +
-            "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
-            "\"isRenter\":true," +
-            "\"isSeller\":false," +
-            "\"first_name\":\"Firstname1\"," +
-            "\"last_Name\":\"Lastname1\"," +
-            "\"userID\":\"user1\"," +
-            "\"parkingSpots\":[],\"reservations\":[]}";
-
-    String user2Expected = "{\"password\":\"password2\"," +
-            "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
-            "\"isRenter\":false," +
-            "\"isSeller\":true," +
-            "\"first_name\":\"Firstname2\"," +
-            "\"last_Name\":\"Lastname2\"," +
-            "\"userID\":\"user2\"," +
-            "\"parkingSpots\":[],\"reservations\":[]}";
-
-    String getAllUsersExpected = "{\"password\":\"password1\"," +
+    String user1Expected = "[{\"password\":\"password1\"," +
             "\"email\":\"Firstname1.Lastname1@gmail.com\"," +
             "\"isRenter\":true," +
             "\"isSeller\":false," +
             "\"first_name\":\"Firstname1\"," +
             "\"last_Name\":\"Lastname1\"," +
             "\"userID\":\"id1\"," +
-            "\"parkingSpots\":[],\"reservations\":[]}," +
-            "{\"password\":\"password2\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}]";
+    
+
+    String user2Expected = "[{\"password\":\"password2\"," +
             "\"email\":\"Firstname2.Lastname2@gmail.com\"," +
             "\"isRenter\":false," +
             "\"isSeller\":true," +
             "\"first_name\":\"Firstname2\"," +
             "\"last_Name\":\"Lastname2\"," +
-            "\"userID\":\"user2\"," +
-            "\"parkingSpots\":[],\"reservations\":[]}";
+            "\"userID\":\"id2\"," +
+            "\"parkingSpots\":[],\"reservations\":[]}]";
+
+    String getAllUsersExpected = "[{\"password\":\"password1\","
+    		+ "\"email\":\"Firstname1.Lastname1@gmail.com\","
+    		+ "\"isRenter\":true,\"isSeller\":false,"
+    		+ "\"first_name\":\"Firstname1\",\"last_Name\":\"Lastname1\","
+    		+ "\"userID\":\"id1\",\"parkingSpots\":[],"
+    		+ "\"reservations\":[]},"
+    		+ "{\"password\":\"password2\","
+    		+ "\"email\":\"Firstname2.Lastname2@gmail.com\","
+    		+ "\"isRenter\":false,\"isSeller\":true,"
+    		+ "\"first_name\":\"Firstname2\",\"last_Name\":\"Lastname2\","
+    		+ "\"userID\":\"id2\",\"parkingSpots\":[],\"reservations\":[]}]";
 
     @Before
     public void setup() throws Exception {
@@ -104,7 +105,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void addRenterTest() throws Exception {
+    public void test03_addRenterTest() throws Exception {
 
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,11 +117,11 @@ public class UserControllerTests {
 
 
         MvcResult resultBody = result.andReturn();
-        assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
+        assertEquals(resultString, resultBody.getResponse().getContentAsString());
     }
     
     @Test
-    public void addSellerTest() throws Exception {
+    public void test04_addSellerTest() throws Exception {
 
         ResultActions result = mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -131,11 +132,11 @@ public class UserControllerTests {
         String resultString = "User Created";
 
         MvcResult resultBody = result.andReturn();
-        assertTrue(resultBody.getResponse().getContentAsString().equals(resultString));
+        assertEquals(resultString, resultBody.getResponse().getContentAsString());
     }
 
     @Test
-    public void getAllUsersTest() throws Exception {
+    public void test05_getAllUsersTest() throws Exception {
 
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,11 +157,11 @@ public class UserControllerTests {
 
         // Check if responses match
         MvcResult resultBody = getAllResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(getAllUsersExpected));
+        assertEquals(getAllUsersExpected, resultBody.getResponse().getContentAsString());
     }
 
     @Test
-    public void getUserByFirstNameTest() throws Exception {
+    public void test06_getUserByFirstNameTest() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -170,17 +171,17 @@ public class UserControllerTests {
                 .andExpect(status().isOk());
 
         // Get user
-        ResultActions getByFirstNameResult = mockMvc.perform(get("/user/firstname/Firsname1")
+        ResultActions getByFirstNameResult = mockMvc.perform(get("/user/firstname/Firstname1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
         // Check if response match
         MvcResult resultBody = getByFirstNameResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
+        assertEquals(user1Expected, resultBody.getResponse().getContentAsString());
     }
 
     @Test
-    public void getUserByLastNameTest() throws Exception {
+    public void test07_getUserByLastNameTest() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -196,12 +197,13 @@ public class UserControllerTests {
 
         // Check if response match
         MvcResult resultBody = getByLastNameResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
+        assertEquals(user1Expected, resultBody.getResponse().getContentAsString());
     }
 
     @Test
-    public void getUserByIDTest() throws Exception {
+    public void test08_getUserByIDTest() throws Exception {
 
+    	
         // Post to the local database
         mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -216,11 +218,11 @@ public class UserControllerTests {
 
         // Check if response match
         MvcResult resultBody = getByIDResult.andReturn();
-        assertThat(resultBody.getResponse().getContentAsString().equals(user1Expected));
+        assertEquals(user1Expected.substring(1, user1Expected.length() - 1), resultBody.getResponse().getContentAsString());
     }
     
     @Test
-    public void deleteUserById() throws Exception 
+    public void test09_deleteUserById() throws Exception 
     {
 
         mockMvc.perform(post("/user")
@@ -240,7 +242,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticateWithEmail() throws Exception {
+    public void test10_authenticateWithEmail() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -261,7 +263,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticateWithUsername() throws Exception {
+    public void test11_authenticateWithUsername() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
@@ -282,7 +284,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void authenticationFailsOnWrongCredentials() throws Exception {
+    public void test12_authenticationFailsOnWrongCredentials() throws Exception {
 
         // Post to the local database
         mockMvc.perform(post("/user")
