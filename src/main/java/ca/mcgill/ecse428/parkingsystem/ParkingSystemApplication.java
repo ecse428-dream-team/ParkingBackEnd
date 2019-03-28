@@ -20,6 +20,7 @@ public class ParkingSystemApplication {
 		SpringApplication.run(ParkingSystemApplication.class, args);
 	}
 
+	//Create Parking Manager on startup
 	@Bean
     public void createSingletonParkingManager() {
 	    try {
@@ -30,6 +31,7 @@ public class ParkingSystemApplication {
         }
     }
 	
+	//Allow ORS
 	@Bean
 	@SuppressWarnings("deprecation")
 	public WebMvcConfigurer corsConfigurer() {
