@@ -1,17 +1,16 @@
 package ca.mcgill.ecse428.parkingsystem.ControllerTests;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
-import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+
+import ca.mcgill.ecse428.parkingsystem.model.ParkingManager;
+import ca.mcgill.ecse428.parkingsystem.repository.ParkingManagerRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
